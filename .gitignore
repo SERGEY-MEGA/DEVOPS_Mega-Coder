@@ -1,0 +1,15 @@
+# Локальные секреты Terraform (пример безопасного игнора — tfvars с паролями).
+*.auto.tfvars
+terraform/.terraform/
+terraform/*.tfstate.*
+crash.log
+
+# Ansible: реальный inventory с IP (шаблон — hosts.ini.example).
+ansible/inventory/hosts.ini
+
+# Python / ОС
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# По требованию ТЗ файл terraform.tfstate может фиксироваться в репозитории — не игнорируем его здесь.

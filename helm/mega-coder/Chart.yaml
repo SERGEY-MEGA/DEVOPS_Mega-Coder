@@ -1,0 +1,7 @@
+# Метаданные Helm-чарта приложения MEGA CODER (требования ТЗ: Chart.yaml).
+apiVersion: v2
+name: mega-coder
+description: Три сервиса (api, web, worker) + Redis для курса DevOps
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

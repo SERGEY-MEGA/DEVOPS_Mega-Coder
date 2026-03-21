@@ -1,0 +1,12 @@
+---
+# Handlers вызываются из tasks при изменении конфигов; обеспечивают идемпотентный перезапуск служб.
+
+- name: restart_sshd
+  ansible.builtin.service:
+    name: ssh
+    state: restarted
+
+- name: restart_auditd
+  ansible.builtin.service:
+    name: auditd
+    state: restarted

@@ -1,0 +1,26 @@
+# Упрощённый Loki stack: Loki + Promtail (сбор логов с нод и подов).
+# Для production обычно используют отдельные чарты loki + promtail.
+
+loki:
+  enabled: true
+  persistence:
+    enabled: false
+  config:
+    schema_config:
+      configs:
+        - from: 2024-01-01
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
+
+promtail:
+  enabled: true
+
+grafana:
+  enabled: false
+
+prometheus:
+  enabled: false

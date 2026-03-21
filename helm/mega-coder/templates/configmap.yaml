@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+data:
+  # Публичные настройки (не секреты) — соответствие ТЗ: ConfigMap.
+  API_SERVICE_NAME: {{ .Values.config.api.serviceName | quote }}
+  WORKER_SERVICE_NAME: {{ .Values.config.worker.serviceName | quote }}

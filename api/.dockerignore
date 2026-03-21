@@ -1,0 +1,10 @@
+# Уменьшаем контекст сборки: ускорение и безопасность (обязательный .dockerignore по ТЗ).
+__pycache__
+*.py[cod]
+.pytest_cache
+.mypy_cache
+.venv
+.env
+*.md
+.git
+.gitignore

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-worker
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: worker
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount.worker }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: worker
+      app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: worker
+        app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: worker
+          image: {{ include "mega-coder.image" (dict "root" . "image" .Values.images.worker) }}
+          imagePullPolicy: {{ .Values.images.worker.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8081
+          env:
+            - name: SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "mega-coder.fullname" . }}-config
+                  key: WORKER_SERVICE_NAME
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20

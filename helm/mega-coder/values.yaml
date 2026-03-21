@@ -1,0 +1,62 @@
+# Параметры чарта — всё, что меняется при деплое, выносим сюда (требование ТЗ).
+global:
+  # Полный путь registry без завершающего слэша, например registry.gitlab.com/group/project
+  imageRegistry: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Namespace задаётся при установке: helm upgrade --install ... -n mega-coder --create-namespace
+
+# Для приватного GitLab Registry CI подставляет --set-json (см. .gitlab-ci.yml).
+imagePullSecrets: []
+
+images:
+  api:
+    repository: api
+    tag: "dev"
+    pullPolicy: IfNotPresent
+  web:
+    repository: web
+    tag: "dev"
+    pullPolicy: IfNotPresent
+  worker:
+    repository: worker
+    tag: "dev"
+    pullPolicy: IfNotPresent
+  redis:
+    # Образ с Docker Hub; imageRegistry не наследуем от global (см. _helpers.tpl).
+    imageRegistry: docker.io
+    repository: library/redis
+    tag: "7.2.4-alpine3.20"
+    pullPolicy: IfNotPresent
+
+replicaCount:
+  api: 2
+  web: 2
+  worker: 2
+  redis: 1
+
+service:
+  type: ClusterIP
+  webPort: 8080
+  apiPort: 8000
+  workerPort: 8081
+  redisPort: 6379
+
+secrets:
+  # Значение переопределяется при helm install --set или из CI (GitLab Variable).
+  appSharedSecret: "change-me"
+
+config:
+  api:
+    serviceName: api
+  worker:
+    serviceName: worker
+
+ingress:
+  enabled: false
+  className: nginx
+  host: mega-coder.example.com
+
+resources: {}

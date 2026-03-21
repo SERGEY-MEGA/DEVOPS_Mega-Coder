@@ -1,0 +1,8 @@
+# Скопируйте в hosts.ini и подставьте IP из terraform output (ansible_inventory_snippet).
+# Действие: один файл inventory по ТЗ (статический).
+
+[k8s_master]
+# Пример: 51.250.x.x ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_ed25519
+
+[k8s_workers]
+# Пример: 51.250.x.x ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_ed25519

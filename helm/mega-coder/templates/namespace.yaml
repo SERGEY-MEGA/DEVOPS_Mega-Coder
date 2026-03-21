@@ -1,0 +1,8 @@
+# Явный объект Namespace (требование ТЗ). Имя совпадает с -n при helm upgrade --install.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}

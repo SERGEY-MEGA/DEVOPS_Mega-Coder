@@ -1,0 +1,79 @@
+---
+# Роль hardening — вариант A из ТЗ (CIS-подобный hardening).
+# Идемпотентность: стандартные модули Ansible не дублируют лишних изменений.
+
+- name: Обновить кэш apt и пакеты до актуальных стабильных версий
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+    cache_valid_time: 3600
+
+- name: Установить UFW и auditd
+  ansible.builtin.apt:
+    name:
+      - ufw
+      - auditd
+      - audispd-plugins
+    state: present
+
+- name: Запретить вход root по SSH
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart_sshd
+
+- name: Разрешить только ключи SSH
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart_sshd
+
+- name: Применить изменения sshd до следующих шагов
+  ansible.builtin.meta: flush_handlers
+
+- name: Проверить, что SSH снова доступен после рестарта sshd
+  ansible.builtin.wait_for:
+    port: 22
+    host: "{{ ansible_host | default(inventory_hostname) }}"
+    delay: 5
+    timeout: 120
+
+- name: Включить UFW (deny по умолчанию)
+  community.general.ufw:
+    state: enabled
+    policy: deny
+    logging: 'on'
+
+- name: UFW — порты из ТЗ (22, 6443, 80, 443)
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - '22'
+    - '6443'
+    - '80'
+    - '443'
+
+- name: Включить auditd
+  ansible.builtin.service:
+    name: auditd
+    state: started
+    enabled: true
+
+# Для нод Kubernetes forwarding должен быть включён (поды ↔ сервисы); в ТЗ — «если не нужен».
+- name: Sysctl — rp_filter, syncookies; ip_forward=1 для рабочих нод K8s
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_set: true
+    state: present
+    reload: true
+  loop:
+    - { key: 'net.ipv4.conf.all.rp_filter', value: '1' }
+    - { key: 'net.ipv4.tcp_syncookies', value: '1' }
+    - { key: 'net.ipv4.ip_forward', value: '1' }

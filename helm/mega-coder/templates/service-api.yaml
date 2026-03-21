@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+  ports:
+    - name: http
+      port: {{ .Values.service.apiPort }}
+      targetPort: http

@@ -1,0 +1,107 @@
+# GitLab CI/CD по ТЗ курса DevOps: стадии pre_build → build → deploy.
+# Секреты и kubeconfig — только GitLab CI/CD Variables (не хранить в репозитории).
+
+stages:
+  - pre_build
+  - build
+  - deploy
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_DRIVER: overlay2
+  # Имя Helm-релиза и namespace приложения (отдельный namespace по ТЗ).
+  HELM_RELEASE: mega
+  K8S_NAMESPACE: mega-coder
+
+# --- pre_build: формируем тег образа и базовый путь registry (артефакт dotenv) ---
+prepare_image_tag:
+  stage: pre_build
+  image: alpine:3.21.0
+  script:
+    # Действие: единый IMAGE_TAG для всех сервисов, воспроизводимая связка с pipeline.
+    - echo "IMAGE_TAG=${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_ID}" >> build.env
+    - echo "REGISTRY_BASE=${CI_REGISTRY_IMAGE}" >> build.env
+    - cat build.env
+  artifacts:
+    reports:
+      dotenv: build.env
+
+# Шаблон сборки: dind + login в GitLab Container Registry
+.docker_build:
+  stage: build
+  image: docker:27.3.1-cli
+  services:
+    - name: docker:27.3.1-dind
+      alias: docker
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+
+build_api:
+  extends: .docker_build
+  needs: ["prepare_image_tag"]
+  script:
+    - docker build -t "${CI_REGISTRY_IMAGE}/api:${IMAGE_TAG}" ./api
+    - docker push "${CI_REGISTRY_IMAGE}/api:${IMAGE_TAG}"
+
+build_web:
+  extends: .docker_build
+  needs: ["prepare_image_tag"]
+  script:
+    - docker build -t "${CI_REGISTRY_IMAGE}/web:${IMAGE_TAG}" ./web
+    - docker push "${CI_REGISTRY_IMAGE}/web:${IMAGE_TAG}"
+
+build_worker:
+  extends: .docker_build
+  needs: ["prepare_image_tag"]
+  script:
+    - docker build -t "${CI_REGISTRY_IMAGE}/worker:${IMAGE_TAG}" ./worker
+    - docker push "${CI_REGISTRY_IMAGE}/worker:${IMAGE_TAG}"
+
+# --- deploy: Helm upgrade --install на Kubernetes (требование ТЗ) ---
+# Переменная KUBE_CONFIG — тип File в GitLab (содержимое kubeconfig).
+# Переменная APP_SHARED_SECRET — тип Variable, masked (значение для Helm secrets.appSharedSecret).
+deploy_helm:
+  stage: deploy
+  image:
+    name: alpine/helm:3.16.3
+    entrypoint: [""]
+  needs:
+    - job: prepare_image_tag
+    - job: build_api
+    - job: build_web
+    - job: build_worker
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  before_script:
+    - apk add --no-cache kubectl
+    - |
+      if [ -z "${KUBE_CONFIG}" ]; then
+        echo "Задайте переменную KUBE_CONFIG (тип File) в GitLab CI/CD Variables"
+        exit 1
+      fi
+    - export KUBECONFIG="${KUBE_CONFIG}"
+    - kubectl config current-context
+  script:
+    # Namespace нужен до docker-registry secret; совместимо с --create-namespace у Helm.
+    - kubectl create namespace "${K8S_NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
+    # Секрет pull для приватных образов GitLab Registry (идемпотентно).
+    - |
+      kubectl create secret docker-registry gitlab-registry \
+        --docker-server="${CI_REGISTRY}" \
+        --docker-username="${CI_REGISTRY_USER}" \
+        --docker-password="${CI_REGISTRY_PASSWORD}" \
+        --namespace="${K8S_NAMESPACE}" \
+        --dry-run=client -o yaml | kubectl apply -f -
+    # Действие: идемпотентная установка/обновление чарта (helm upgrade --install).
+    - |
+      helm upgrade --install "${HELM_RELEASE}" ./helm/mega-coder \
+        --namespace "${K8S_NAMESPACE}" \
+        --create-namespace \
+        --set global.imageRegistry="${CI_REGISTRY_IMAGE}" \
+        --set images.api.tag="${IMAGE_TAG}" \
+        --set images.web.tag="${IMAGE_TAG}" \
+        --set images.worker.tag="${IMAGE_TAG}" \
+        --set-json 'imagePullSecrets=[{"name":"gitlab-registry"}]' \
+        --set secrets.appSharedSecret="${APP_SHARED_SECRET:-change-me-in-gitlab-variable}" \
+        --wait \
+        --timeout 5m

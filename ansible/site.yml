@@ -1,0 +1,10 @@
+---
+# Главный playbook (требование ТЗ: site.yml или playbook.yml).
+# Запуск: ansible-playbook -i inventory/hosts.ini site.yml
+# Действие: применяем роль hardening ко всем нодам кластера (вариант A — харднинг).
+
+- name: Базовая защита нод (CIS-подобный hardening)
+  hosts: k8s_master:k8s_workers
+  become: true
+  roles:
+    - role: hardening

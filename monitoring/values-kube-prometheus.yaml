@@ -1,0 +1,28 @@
+# Значения для чарта kube-prometheus-stack (Prometheus + Grafana + node-exporter + kube-state-metrics).
+# Действие: включить компоненты, заданные в ТЗ курса.
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+
+grafana:
+  enabled: true
+  adminPassword: "change-me-in-gitlab-or-helm" # в проде задать через --set или External Secret
+  persistence:
+    enabled: false
+  service:
+    type: ClusterIP
+
+alertmanager:
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
+
+defaultRules:
+  create: true

@@ -1,0 +1,9 @@
+# Скопируйте в terraform.tfvars и подставьте свои идентификаторы (не коммитьте секреты токенов).
+cloud_id  = "b1g..."
+folder_id = "b1g..."
+zone      = "ru-central1-a"
+
+# Ограничьте SSH своей подсетью /32 для безопасности.
+allow_ssh_cidr = "0.0.0.0/0"
+
+ssh_public_key_path = "~/.ssh/id_ed25519.pub"
