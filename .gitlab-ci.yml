@@ -1,5 +1,5 @@
 # GitLab CI/CD по ТЗ курса DevOps: стадии pre_build → build → deploy.
-# Секреты и kubeconfig — только GitLab CI/CD Variables (не хранить в репозитории).
+# Сборка через Kaniko (без docker:dind) — на shared runners GitLab не нужен privileged-режим.
 
 stages:
   - pre_build
@@ -7,18 +7,14 @@ stages:
   - deploy
 
 variables:
-  DOCKER_TLS_CERTDIR: "/certs"
-  DOCKER_DRIVER: overlay2
-  # Имя Helm-релиза и namespace приложения (отдельный namespace по ТЗ).
   HELM_RELEASE: mega
   K8S_NAMESPACE: mega-coder
 
-# --- pre_build: формируем тег образа и базовый путь registry (артефакт dotenv) ---
+# --- pre_build: тег образа в dotenv для следующих job ---
 prepare_image_tag:
   stage: pre_build
   image: alpine:3.21.0
   script:
-    # Действие: единый IMAGE_TAG для всех сервисов, воспроизводимая связка с pipeline.
     - echo "IMAGE_TAG=${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_ID}" >> build.env
     - echo "REGISTRY_BASE=${CI_REGISTRY_IMAGE}" >> build.env
     - cat build.env
@@ -26,43 +22,47 @@ prepare_image_tag:
     reports:
       dotenv: build.env
 
-# Шаблон сборки: dind + login в GitLab Container Registry
-.docker_build:
+# Kaniko: пуш в GitLab Container Registry через CI_JOB_TOKEN
+.kaniko_build:
   stage: build
-  image: docker:27.3.1-cli
-  services:
-    - name: docker:27.3.1-dind
-      alias: docker
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  needs: ["prepare_image_tag"]
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "gitlab-ci-token" "${CI_JOB_TOKEN}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
 
 build_api:
-  extends: .docker_build
-  needs: ["prepare_image_tag"]
+  extends: .kaniko_build
   script:
-    - docker build -t "${CI_REGISTRY_IMAGE}/api:${IMAGE_TAG}" ./api
-    - docker push "${CI_REGISTRY_IMAGE}/api:${IMAGE_TAG}"
+    - |
+      /kaniko/executor \
+        --context "${CI_PROJECT_DIR}/api" \
+        --dockerfile "${CI_PROJECT_DIR}/api/Dockerfile" \
+        --destination "${CI_REGISTRY_IMAGE}/api:${IMAGE_TAG}"
 
 build_web:
-  extends: .docker_build
-  needs: ["prepare_image_tag"]
+  extends: .kaniko_build
   script:
-    - docker build -t "${CI_REGISTRY_IMAGE}/web:${IMAGE_TAG}" ./web
-    - docker push "${CI_REGISTRY_IMAGE}/web:${IMAGE_TAG}"
+    - |
+      /kaniko/executor \
+        --context "${CI_PROJECT_DIR}/web" \
+        --dockerfile "${CI_PROJECT_DIR}/web/Dockerfile" \
+        --destination "${CI_REGISTRY_IMAGE}/web:${IMAGE_TAG}"
 
 build_worker:
-  extends: .docker_build
-  needs: ["prepare_image_tag"]
+  extends: .kaniko_build
   script:
-    - docker build -t "${CI_REGISTRY_IMAGE}/worker:${IMAGE_TAG}" ./worker
-    - docker push "${CI_REGISTRY_IMAGE}/worker:${IMAGE_TAG}"
+    - |
+      /kaniko/executor \
+        --context "${CI_PROJECT_DIR}/worker" \
+        --dockerfile "${CI_PROJECT_DIR}/worker/Dockerfile" \
+        --destination "${CI_REGISTRY_IMAGE}/worker:${IMAGE_TAG}"
 
-# --- deploy: Helm upgrade --install на Kubernetes (требование ТЗ) ---
-# Переменная KUBE_CONFIG — тип File в GitLab (содержимое kubeconfig).
-# Переменная APP_SHARED_SECRET — тип Variable, masked (значение для Helm secrets.appSharedSecret).
+# --- deploy: Helm (пока allow_failure — без KUBE_CONFIG job падает, но пайплайн может быть Passed) ---
 deploy_helm:
   stage: deploy
-  # Пока нет KUBE_CONFIG / кластера пайплайн остаётся «зелёным» после build (для проверки на экзамене уберите allow_failure).
   allow_failure: true
   image:
     name: alpine/helm:3.16.3
@@ -84,9 +84,7 @@ deploy_helm:
     - export KUBECONFIG="${KUBE_CONFIG}"
     - kubectl config current-context
   script:
-    # Namespace нужен до docker-registry secret; совместимо с --create-namespace у Helm.
     - kubectl create namespace "${K8S_NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
-    # Секрет pull для приватных образов GitLab Registry (идемпотентно).
     - |
       kubectl create secret docker-registry gitlab-registry \
         --docker-server="${CI_REGISTRY}" \
@@ -94,7 +92,6 @@ deploy_helm:
         --docker-password="${CI_REGISTRY_PASSWORD}" \
         --namespace="${K8S_NAMESPACE}" \
         --dry-run=client -o yaml | kubectl apply -f -
-    # Действие: идемпотентная установка/обновление чарта (helm upgrade --install).
     - |
       helm upgrade --install "${HELM_RELEASE}" ./helm/mega-coder \
         --namespace "${K8S_NAMESPACE}" \
