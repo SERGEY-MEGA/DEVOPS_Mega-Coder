@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/component: api
     app.kubernetes.io/name: {{ include "mega-coder.name" . }}
 spec:
+  # 2 реплики backend показывают масштабирование Deployment и соответствие ТЗ.
   replicas: {{ .Values.replicaCount.api }}
   selector:
     matchLabels:
@@ -27,32 +28,38 @@ spec:
         runAsNonRoot: true
       containers:
         - name: api
+          # Образ и tag приходят из GitLab CI/CD при helm upgrade --install.
           image: {{ include "mega-coder.image" (dict "root" . "image" .Values.images.api) }}
           imagePullPolicy: {{ .Values.images.api.pullPolicy }}
           ports:
             - name: http
               containerPort: 8000
           env:
+            # SERVICE_NAME читается приложением и отображается в ответах /health.
             - name: SERVICE_NAME
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "mega-coder.fullname" . }}-config
                   key: API_SERVICE_NAME
+            # REDIS_URL и WORKER_BASE_URL демонстрируют связь backend с другими сервисами внутри кластера.
             - name: REDIS_URL
               value: "redis://{{ include "mega-coder.fullname" . }}-redis:{{ .Values.service.redisPort }}/0"
             - name: WORKER_BASE_URL
               value: "http://{{ include "mega-coder.fullname" . }}-worker:{{ .Values.service.workerPort }}"
+            # Секрет передаётся отдельно от ConfigMap, потому что это чувствительные данные.
             - name: APP_SHARED_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mega-coder.fullname" . }}-secret
                   key: APP_SHARED_SECRET
+          # Readiness строже: сервис считается готовым только если доступны его зависимости.
           readinessProbe:
             httpGet:
               path: /ready
               port: http
             initialDelaySeconds: 5
             periodSeconds: 10
+          # Liveness легче: просто подтверждает, что процесс backend жив.
           livenessProbe:
             httpGet:
               path: /health

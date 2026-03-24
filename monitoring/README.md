@@ -2,6 +2,15 @@
 
 Стек ставится **Helm-чартами** в том же Kubernetes-кластере. Ниже — команды и назначение файлов `values-*.yaml`.
 
+Что именно этот стек закрывает по ТЗ:
+
+- `Prometheus` — метрики;
+- `Grafana` — дашборды;
+- `Node Exporter` — системные метрики нод;
+- `kube-state-metrics` — состояние объектов Kubernetes;
+- `Loki` — хранение логов;
+- `Promtail` — доставка логов контейнеров в Loki.
+
 ## Предусловия
 
 - Установлены `helm` 3.x и `kubectl`, настроен `KUBECONFIG`.
@@ -14,6 +23,8 @@ helm repo update
 ```
 
 ## 1) kube-prometheus-stack (Prometheus + Grafana + Node Exporter + kube-state-metrics)
+
+Этот chart выбран потому, что он одним релизом ставит почти весь обязательный monitoring-стек.
 
 ```bash
 helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
@@ -34,6 +45,8 @@ kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
 ```
 
 ## 2) Loki + Promtail (логи)
+
+Логи ставятся отдельно, чтобы не смешивать стек метрик и стек логирования.
 
 ```bash
 helm upgrade --install loki grafana/loki-stack \

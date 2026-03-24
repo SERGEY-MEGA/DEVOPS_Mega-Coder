@@ -3,7 +3,9 @@
 
 prometheus:
   prometheusSpec:
+    # Для учебного стенда 7 дней достаточно: метрики не растут бесконечно и не забивают диск.
     retention: 7d
+    # Эти флаги оставляют возможность подключать свои ServiceMonitor/PodMonitor позже.
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
 
@@ -19,9 +21,11 @@ alertmanager:
   enabled: true
 
 nodeExporter:
+  # Системные метрики хостов: CPU, RAM, filesystem, network.
   enabled: true
 
 kubeStateMetrics:
+  # Состояние Kubernetes-объектов: pods, deployments, replicasets и т.д.
   enabled: true
 
 defaultRules:

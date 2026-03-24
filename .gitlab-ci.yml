@@ -7,13 +7,18 @@ stages:
   - deploy
 
 workflow:
+  # Разделяем pipeline по источнику запуска:
+  # merge request нужен для проверки сборки,
+  # push в main дополнительно запускает deploy.
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH
 
 variables:
+  # Эти переменные используются в deploy job и делают pipeline короче и понятнее.
   HELM_RELEASE: mega
   K8S_NAMESPACE: mega-coder
+  # Kaniko складывает сюда кэш слоёв, чтобы ускорять повторные сборки образов.
   KANIKO_CACHE_REPO: ${CI_REGISTRY_IMAGE}/cache
 
 # --- pre_build: тег образа в dotenv для следующих job ---
@@ -21,7 +26,9 @@ prepare_image_tag:
   stage: pre_build
   image: alpine:3.21.0
   script:
+    # Один и тот же тег потом используется для api/web/worker, чтобы деплой ссылался на единый набор образов.
     - echo "IMAGE_TAG=${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_ID}" >> build.env
+    # Сохраняем базовый путь Registry как артефакт для следующих job.
     - echo "REGISTRY_BASE=${CI_REGISTRY_IMAGE}" >> build.env
     - cat build.env
   artifacts:
@@ -39,13 +46,16 @@ prepare_image_tag:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH
   before_script:
+    # Kaniko работает без docker daemon и читает registry auth из этого файла.
     - mkdir -p /kaniko/.docker
+    # Используем встроенный CI_JOB_TOKEN, чтобы не хранить лишний пароль к Registry.
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "gitlab-ci-token" "${CI_JOB_TOKEN}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
 
 build_api:
   extends: .kaniko_build
   script:
     - |
+      # Сборка и push backend-образа.
       /kaniko/executor \
         --context "${CI_PROJECT_DIR}/api" \
         --dockerfile "${CI_PROJECT_DIR}/api/Dockerfile" \
@@ -57,6 +67,7 @@ build_web:
   extends: .kaniko_build
   script:
     - |
+      # Сборка frontend/reverse-proxy образа.
       /kaniko/executor \
         --context "${CI_PROJECT_DIR}/web" \
         --dockerfile "${CI_PROJECT_DIR}/web/Dockerfile" \
@@ -68,6 +79,7 @@ build_worker:
   extends: .kaniko_build
   script:
     - |
+      # Сборка вспомогательного worker-сервиса.
       /kaniko/executor \
         --context "${CI_PROJECT_DIR}/worker" \
         --dockerfile "${CI_PROJECT_DIR}/worker/Dockerfile" \
@@ -91,6 +103,7 @@ deploy_helm:
   before_script:
     - apk add --no-cache kubectl
     - |
+      # KUBE_CONFIG должен быть файловой GitLab Variable, иначе deploy не знает, в какой кластер идти.
       if [ -z "${KUBE_CONFIG}" ]; then
         echo "Задайте переменную KUBE_CONFIG (тип File) в GitLab CI/CD Variables"
         exit 1
@@ -98,8 +111,10 @@ deploy_helm:
     - export KUBECONFIG="${KUBE_CONFIG}"
     - kubectl config current-context
   script:
+    # Namespace создаём идемпотентно: повторный запуск job ничего не ломает.
     - kubectl create namespace "${K8S_NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
     - |
+      # Этот secret нужен Kubernetes, чтобы тянуть приватные образы из GitLab Container Registry.
       kubectl create secret docker-registry gitlab-registry \
         --docker-server="${CI_REGISTRY}" \
         --docker-username="${CI_REGISTRY_USER}" \
@@ -107,6 +122,7 @@ deploy_helm:
         --namespace="${K8S_NAMESPACE}" \
         --dry-run=client -o yaml | kubectl apply -f -
     - |
+      # Helm ставит или обновляет release. --atomic и --cleanup-on-fail дают безопасный rollback.
       helm upgrade --install "${HELM_RELEASE}" ./helm/mega-coder \
         --namespace "${K8S_NAMESPACE}" \
         --create-namespace \

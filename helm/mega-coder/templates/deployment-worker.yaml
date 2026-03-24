@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/component: worker
     app.kubernetes.io/name: {{ include "mega-coder.name" . }}
 spec:
+  # Worker — отдельный компонент приложения, поэтому тоже масштабируется независимо.
   replicas: {{ .Values.replicaCount.worker }}
   selector:
     matchLabels:
@@ -26,12 +27,14 @@ spec:
         runAsNonRoot: true
       containers:
         - name: worker
+          # Worker нужен, чтобы показать service-to-service взаимодействие api -> worker в Kubernetes.
           image: {{ include "mega-coder.image" (dict "root" . "image" .Values.images.worker) }}
           imagePullPolicy: {{ .Values.images.worker.pullPolicy }}
           ports:
             - name: http
               containerPort: 8081
           env:
+            # Имя сервиса отдаётся в /health и показывает работу ConfigMap в рантайме.
             - name: SERVICE_NAME
               valueFrom:
                 configMapKeyRef:

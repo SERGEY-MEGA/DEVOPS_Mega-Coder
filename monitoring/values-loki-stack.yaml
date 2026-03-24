@@ -4,6 +4,7 @@
 loki:
   enabled: true
   persistence:
+    # Для demo достаточно ephemeral storage; для production лучше выносить данные во внешний storage.
     enabled: false
   config:
     schema_config:
@@ -17,10 +18,13 @@ loki:
             period: 24h
 
 promtail:
+  # Promtail читает container logs на нодах и отправляет их в Loki.
   enabled: true
 
 grafana:
+  # Вторую Grafana не поднимаем, потому что она уже есть в kube-prometheus-stack.
   enabled: false
 
 prometheus:
+  # Второй Prometheus тоже не нужен: метрики уже собираются отдельным релизом.
   enabled: false

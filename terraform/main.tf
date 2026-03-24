@@ -90,6 +90,7 @@ resource "yandex_vpc_security_group" "this" {
 }
 
 locals {
+  # SSH-ключ читается с локальной машины и прокидывается в metadata обеих виртуалок.
   ssh_keys = file(pathexpand(var.ssh_public_key_path))
 }
 
@@ -118,12 +119,14 @@ resource "yandex_compute_instance" "master" {
   }
 
   network_interface {
+    # NAT включаем, чтобы Ansible и администратор могли подключаться к ноде извне.
     subnet_id          = yandex_vpc_subnet.this.id
     nat                = true
     security_group_ids = [yandex_vpc_security_group.this.id]
   }
 
   metadata = {
+    # Сразу создаём доступ по SSH-ключу для пользователя ubuntu.
     ssh-keys = "ubuntu:${local.ssh_keys}"
   }
 }
@@ -149,6 +152,7 @@ resource "yandex_compute_instance" "worker" {
   }
 
   network_interface {
+    # Worker тоже получает публичный адрес для учебного стенда и простого доступа по SSH.
     subnet_id          = yandex_vpc_subnet.this.id
     nat                = true
     security_group_ids = [yandex_vpc_security_group.this.id]

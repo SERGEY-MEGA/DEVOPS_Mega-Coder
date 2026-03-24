@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/component: web
     app.kubernetes.io/name: {{ include "mega-coder.name" . }}
 spec:
+  # Frontend также запускается в 2 репликах по требованиям ТЗ.
   replicas: {{ .Values.replicaCount.web }}
   selector:
     matchLabels:
@@ -26,12 +27,14 @@ spec:
         runAsNonRoot: true
       containers:
         - name: web
+          # Этот контейнер отвечает за UI и проксирование /api/, а не за бизнес-логику приложения.
           image: {{ include "mega-coder.image" (dict "root" . "image" .Values.images.web) }}
           imagePullPolicy: {{ .Values.images.web.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
           env:
+            # Эти переменные использует docker-entrypoint.sh при генерации nginx.conf.
             - name: PORT
               value: {{ .Values.service.webPort | quote }}
             - name: API_UPSTREAM

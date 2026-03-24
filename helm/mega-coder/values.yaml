@@ -32,12 +32,14 @@ images:
     pullPolicy: IfNotPresent
 
 replicaCount:
+  # По ТЗ у приложения должно быть минимум 2 реплики; Redis оставляем одиночным сервисом.
   api: 2
   web: 2
   worker: 2
   redis: 1
 
 service:
+  # В базовом варианте достаточно ClusterIP; внешний доступ можно дать через Ingress или port-forward.
   type: ClusterIP
   webPort: 8080
   apiPort: 8000
@@ -55,6 +57,7 @@ config:
     serviceName: worker
 
 ingress:
+  # Ingress сделан опциональным, чтобы chart можно было показать даже без ingress-controller.
   enabled: false
   className: nginx
   host: mega-coder.example.com
