@@ -5,7 +5,11 @@
 
 Репозиторий закрывает требования курса: **три сервиса** (API, Web, Worker), **Redis**, **Docker** (multi-stage, non-root, `.dockerignore`), **Helm**, **GitLab CI/CD**, **Terraform** (Yandex Cloud), **Ansible** (харднинг), **мониторинг** (Prometheus, Grafana, Loki, Promtail, Node Exporter, kube-state-metrics).
 
-Полное описание архитектуры, переменных, pipeline и пошаговый запуск — в **[REPORT.md](./REPORT.md)**.
+Основные документы:
+
+- **[REPORT.md](./REPORT.md)** — полный отчёт по проекту.
+- **[PROJECT_MAP.md](./PROJECT_MAP.md)** — где лежит код и что делает каждая папка.
+- **[DEFENSE_GUIDE.md](./DEFENSE_GUIDE.md)** — шпаргалка для устной защиты.
 
 ## Быстрые команды
 
@@ -24,6 +28,11 @@
 - `KUBE_CONFIG` — тип **File**, содержимое `kubeconfig`.
 - `APP_SHARED_SECRET` — произвольная строка (masked), попадёт в Kubernetes Secret.
 
-Pipeline: **pre_build** → **build** (три образа) → **deploy** (только ветка `main`). Пока не настроены переменные CI и кластер, стадия deploy может завершаться ошибкой (см. `allow_failure` в `.gitlab-ci.yml`).
+Pipeline: **pre_build** → **build** (три образа) → **deploy** (только ветка `main`).  
+Дополнительно включены:
+
+- cache слоёв сборки через Kaniko;
+- разделение `merge_request` / branch pipeline через `workflow: rules`;
+- автоматический rollback релиза через `helm --atomic --cleanup-on-fail`.
 
 **Отчёт по курсу:** файл **REPORT.md** (при необходимости экспорт в PDF — см. раздел 0 в отчёте).

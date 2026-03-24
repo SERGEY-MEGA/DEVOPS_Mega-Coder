@@ -6,9 +6,15 @@ stages:
   - build
   - deploy
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
 variables:
   HELM_RELEASE: mega
   K8S_NAMESPACE: mega-coder
+  KANIKO_CACHE_REPO: ${CI_REGISTRY_IMAGE}/cache
 
 # --- pre_build: тег образа в dotenv для следующих job ---
 prepare_image_tag:
@@ -29,6 +35,9 @@ prepare_image_tag:
     name: gcr.io/kaniko-project/executor:v1.23.2-debug
     entrypoint: [""]
   needs: ["prepare_image_tag"]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
   before_script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "gitlab-ci-token" "${CI_JOB_TOKEN}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
@@ -40,7 +49,9 @@ build_api:
       /kaniko/executor \
         --context "${CI_PROJECT_DIR}/api" \
         --dockerfile "${CI_PROJECT_DIR}/api/Dockerfile" \
-        --destination "${CI_REGISTRY_IMAGE}/api:${IMAGE_TAG}"
+        --destination "${CI_REGISTRY_IMAGE}/api:${IMAGE_TAG}" \
+        --cache=true \
+        --cache-repo "${KANIKO_CACHE_REPO}"
 
 build_web:
   extends: .kaniko_build
@@ -49,7 +60,9 @@ build_web:
       /kaniko/executor \
         --context "${CI_PROJECT_DIR}/web" \
         --dockerfile "${CI_PROJECT_DIR}/web/Dockerfile" \
-        --destination "${CI_REGISTRY_IMAGE}/web:${IMAGE_TAG}"
+        --destination "${CI_REGISTRY_IMAGE}/web:${IMAGE_TAG}" \
+        --cache=true \
+        --cache-repo "${KANIKO_CACHE_REPO}"
 
 build_worker:
   extends: .kaniko_build
@@ -58,12 +71,13 @@ build_worker:
       /kaniko/executor \
         --context "${CI_PROJECT_DIR}/worker" \
         --dockerfile "${CI_PROJECT_DIR}/worker/Dockerfile" \
-        --destination "${CI_REGISTRY_IMAGE}/worker:${IMAGE_TAG}"
+        --destination "${CI_REGISTRY_IMAGE}/worker:${IMAGE_TAG}" \
+        --cache=true \
+        --cache-repo "${KANIKO_CACHE_REPO}"
 
-# --- deploy: Helm (пока allow_failure — без KUBE_CONFIG job падает, но пайплайн может быть Passed) ---
+# --- deploy: Helm на main, с atomic rollback при неуспешном релизе ---
 deploy_helm:
   stage: deploy
-  allow_failure: true
   image:
     name: alpine/helm:3.16.3
     entrypoint: [""]
@@ -102,5 +116,7 @@ deploy_helm:
         --set images.worker.tag="${IMAGE_TAG}" \
         --set-json 'imagePullSecrets=[{"name":"gitlab-registry"}]' \
         --set secrets.appSharedSecret="${APP_SHARED_SECRET:-change-me-in-gitlab-variable}" \
+        --atomic \
+        --cleanup-on-fail \
         --wait \
         --timeout 5m
