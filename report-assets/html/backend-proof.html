@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>MEGA CODER: Frontend + Backend</title>
+  
+<style>
+  :root {
+    --bg: #0b1020;
+    --panel: #121a2d;
+    --panel-2: #0f172a;
+    --text: #e5eefb;
+    --muted: #9fb1d0;
+    --accent: #63b3ff;
+    --ok: #32d296;
+    --warn: #ffb454;
+    --border: #26324d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #09111f 0%, #101b31 100%);
+    color: var(--text);
+  }
+  main {
+    width: 1280px;
+    margin: 0 auto;
+    padding: 36px 42px 48px;
+  }
+  h1, h2, h3 { margin: 0 0 16px; }
+  p { margin: 0 0 14px; color: var(--muted); line-height: 1.5; }
+  .hero {
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(18, 26, 45, 0.92);
+    margin-bottom: 22px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .cards-4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .card, .panel {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(18, 26, 45, 0.94);
+    padding: 18px 20px;
+  }
+  .metric-label {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .metric-value {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(50, 210, 150, 0.14);
+    color: var(--ok);
+    border: 1px solid rgba(50, 210, 150, 0.28);
+    font-size: 13px;
+    margin-right: 8px;
+  }
+  .small { font-size: 13px; color: var(--muted); }
+  pre {
+    margin: 0;
+    padding: 16px 18px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 14px;
+  }
+</style>
+
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>MEGA CODER: Frontend + Backend</h1>
+      <p>Живые данные стенда MEGA CODER, зафиксированные 2026-03-26 01:32:01.</p>
+    </section>
+    
+    <section class="grid">
+      <div class="panel">
+        <h2>Backend API</h2>
+        <p>Ответ endpoint <code>/api/info</code> с живого сервиса.</p>
+        <pre>{&quot;message&quot;:&quot;MEGA CODER API&quot;,&quot;service&quot;:&quot;api&quot;,&quot;frontend_hint&quot;:&quot;Откройте веб-интерфейс — он дергает этот метод.&quot;}</pre>
+      </div>
+      <div class="panel">
+        <h2>HTTP-проверка frontend</h2>
+        <p>Проверка NodePort frontend-сервиса.</p>
+        <pre>HTTP/1.1 200 OK
+Server: nginx/1.27.3
+Date: Wed, 25 Mar 2026 22:13:20 GMT
+Content-Type: text/html
+Content-Length: 1315
+Last-Modified: Sat, 21 Mar 2026 18:08:14 GMT
+Connection: keep-alive
+ETag: &quot;69bede8e-523&quot;
+Accept-Ranges: bytes</pre>
+      </div>
+    </section>
+    
+  </main>
+</body>
+</html>

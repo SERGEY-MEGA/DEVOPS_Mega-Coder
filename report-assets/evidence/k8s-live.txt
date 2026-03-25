@@ -1,0 +1,51 @@
+NAME     STATUS   ROLES           AGE    VERSION        INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+server   Ready    control-plane   128m   v1.34.5+k3s1   192.168.1.29   <none>        Ubuntu 24.04.4 LTS   6.17.0-19-generic   containerd://2.1.5-k3s1
+
+====
+NAMESPACE     NAME                                                   READY   STATUS    RESTARTS   AGE    IP             NODE     NOMINATED NODE   READINESS GATES
+kube-system   coredns-695cbbfcb9-54zql                               1/1     Running   0          128m   10.42.0.3      server   <none>           <none>
+kube-system   local-path-provisioner-546dfc6456-dd44z                1/1     Running   0          128m   10.42.0.4      server   <none>           <none>
+kube-system   metrics-server-c8774f4f4-hccvr                         1/1     Running   0          128m   10.42.0.2      server   <none>           <none>
+mega-coder    mega-mega-coder-api-864878fc88-4qjvb                   1/1     Running   0          102m   10.42.0.22     server   <none>           <none>
+mega-coder    mega-mega-coder-api-864878fc88-8mnqn                   1/1     Running   0          102m   10.42.0.17     server   <none>           <none>
+mega-coder    mega-mega-coder-redis-56647786b9-tg6cn                 1/1     Running   0          105m   10.42.0.13     server   <none>           <none>
+mega-coder    mega-mega-coder-web-78545c7589-49tpg                   1/1     Running   0          102m   10.42.0.19     server   <none>           <none>
+mega-coder    mega-mega-coder-web-78545c7589-4dpmz                   1/1     Running   0          102m   10.42.0.20     server   <none>           <none>
+mega-coder    mega-mega-coder-worker-5cc548f7fc-k7kmm                1/1     Running   0          102m   10.42.0.21     server   <none>           <none>
+mega-coder    mega-mega-coder-worker-5cc548f7fc-pv8dz                1/1     Running   0          102m   10.42.0.18     server   <none>           <none>
+monitoring    loki-0                                                 1/1     Running   0          97m    10.42.0.32     server   <none>           <none>
+monitoring    loki-promtail-bwk7l                                    1/1     Running   0          97m    10.42.0.31     server   <none>           <none>
+monitoring    monitoring-grafana-545664c67d-btscv                    3/3     Running   0          99m    10.42.0.28     server   <none>           <none>
+monitoring    monitoring-kube-prometheus-operator-7c6d48b497-dq28j   1/1     Running   0          99m    10.42.0.26     server   <none>           <none>
+monitoring    monitoring-kube-state-metrics-5b8ff7679f-rm48w         1/1     Running   0          99m    10.42.0.27     server   <none>           <none>
+monitoring    monitoring-prometheus-node-exporter-x8726              1/1     Running   0          99m    192.168.1.29   server   <none>           <none>
+monitoring    prometheus-monitoring-kube-prometheus-prometheus-0     2/2     Running   0          99m    10.42.0.29     server   <none>           <none>
+
+====
+NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mega-mega-coder-api      2/2     2            2           113m
+deployment.apps/mega-mega-coder-redis    1/1     1            1           113m
+deployment.apps/mega-mega-coder-web      2/2     2            2           113m
+deployment.apps/mega-mega-coder-worker   2/2     2            2           113m
+
+NAME                             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/mega-mega-coder-api      ClusterIP   10.43.22.63     <none>        8000/TCP         113m
+service/mega-mega-coder-redis    ClusterIP   10.43.165.90    <none>        6379/TCP         113m
+service/mega-mega-coder-web      NodePort    10.43.147.110   <none>        8080:30080/TCP   113m
+service/mega-mega-coder-worker   ClusterIP   10.43.215.154   <none>        8081/TCP         113m
+
+NAME                               DATA   AGE
+configmap/kube-root-ca.crt         1      113m
+configmap/mega-mega-coder-config   2      113m
+
+NAME                                TYPE                 DATA   AGE
+secret/mega-mega-coder-secret       Opaque               1      113m
+secret/sh.helm.release.v1.mega.v1   helm.sh/release.v1   1      113m
+secret/sh.helm.release.v1.mega.v2   helm.sh/release.v1   1      113m
+secret/sh.helm.release.v1.mega.v3   helm.sh/release.v1   1      105m
+
+====
+NAME      	NAMESPACE 	REVISION	UPDATED                                	STATUS  	CHART                        	APP VERSION
+loki      	monitoring	1       	2026-03-25 23:34:46.706831117 +0300 MSK	deployed	loki-stack-2.10.3            	v2.9.3     
+mega      	mega-coder	3       	2026-03-25 23:27:09.538735228 +0300 MSK	deployed	mega-coder-0.1.0             	1.0.0      
+monitoring	monitoring	1       	2026-03-25 23:31:57.395060055 +0300 MSK	deployed	kube-prometheus-stack-82.14.1	v0.89.0    

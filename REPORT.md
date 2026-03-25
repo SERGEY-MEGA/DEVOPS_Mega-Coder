@@ -1,7 +1,8 @@
 # Отчёт по курсу DevOps — проект «MEGA CODER»
 
 **Выполнил:** Сергей  
-**Репозиторий:** `git@gitlab.com:Mega.93/deveps-mega-coder.git`
+**GitHub:** `https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder`  
+**Self-hosted GitLab:** `http://192.168.1.29:8080/MEGA/deveps-mega-coder`
 
 ---
 
@@ -197,6 +198,17 @@ kubectl port-forward -n mega-coder svc/mega-mega-coder-web 8080:8080
 ```
 
 После port-forward приложение доступно по `http://127.0.0.1:8080`.
+
+### 2.6 Локальный live-стенд для защиты
+
+Для демонстрации на домашнем сервере поднят живой стенд:
+
+- `k3s` single-node на `192.168.1.29`;
+- приложение доступно по `http://192.168.1.29:30080`;
+- Grafana доступна по `http://192.168.1.29:30030`;
+- GitLab проекта доступен по `http://192.168.1.29:8080/MEGA/deveps-mega-coder`.
+
+Именно этот стенд использовался для снятия скриншотов ниже.
 
 ---
 
@@ -500,3 +512,66 @@ Job `deploy_helm`:
 - подготовлен отчёт и документы для защиты.
 
 Для устного рассказа по репозиторию используется `DEFENSE_GUIDE.md`, а для навигации по коду — `PROJECT_MAP.md`.
+
+---
+
+## 13. Скриншоты рабочего стенда
+
+Ниже зафиксированы скриншоты с реально работающего демо-стенда. Для backend, Kubernetes, Prometheus и Loki использованы живые данные, полученные непосредственно с сервера `192.168.1.29` на момент подготовки отчёта.
+
+### 13.1 Frontend
+
+Фронтенд-сервис доступен по NodePort и подтверждает выполнение требования ТЗ про UI-интерфейс.
+
+![Frontend UI](report-assets/screenshots/frontend-ui.png)
+
+### 13.2 Backend API
+
+Backend отвечает на endpoint `/api/info`, а frontend успешно отдает HTTP `200 OK`.
+
+![Backend proof](report-assets/screenshots/backend-proof.png)
+
+### 13.3 Kubernetes / k3s
+
+На скриншоте ниже видны:
+
+- нода кластера `k3s` в статусе `Ready`;
+- pod'ы приложения и monitoring;
+- объекты `Deployment`, `Service`, `ConfigMap`, `Secret`;
+- Helm releases для приложения и monitoring stack.
+
+![Kubernetes proof](report-assets/screenshots/k8s-proof.png)
+
+### 13.4 Grafana UI
+
+Grafana web UI поднята и доступна на локальном сервере.
+
+![Grafana login](report-assets/screenshots/grafana-login.png)
+
+### 13.5 Monitoring stack
+
+Ниже показаны живые метрики из Prometheus и kube-state-metrics, которые используются в Grafana dashboard'ах:
+
+- количество доступных scrape-target;
+- загрузка CPU;
+- доступная память;
+- свободное место на диске;
+- доступные реплики deployment'ов в namespace `mega-coder`.
+
+![Monitoring proof](report-assets/screenshots/monitoring-proof.png)
+
+### 13.6 Loki / application logs
+
+Ниже показаны реальные логи, собранные `Promtail` и доступные через `Loki` по namespace `mega-coder`. В выборке присутствуют логи `api`, `web` и `worker`.
+
+![Loki proof](report-assets/screenshots/loki-proof.png)
+
+### 13.7 Исходные evidence-файлы
+
+Дополнительно в репозитории сохранены исходные данные, из которых были собраны страницы доказательств:
+
+- `report-assets/evidence/k8s-live.txt`
+- `report-assets/evidence/api-info.json`
+- `report-assets/evidence/prometheus-*.json`
+- `report-assets/evidence/loki-query.json`
+- `report-assets/html/*.html`
