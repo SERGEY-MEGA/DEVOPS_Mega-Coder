@@ -1,14 +1,14 @@
 # Шпаргалка для защиты проекта MEGA CODER
 
 
-## 1. Как представить проект за 1 минуту
+## 1. Представить проект за 1 минуту
 
 > Я сделал учебный DevOps-проект **MEGA CODER**.  
 > Это многосервисное приложение из **трёх сервисов**: `web`, `api`, `worker`, плюс `redis`.  
 > Код собирается через **GitLab CI/CD**, образы публикуются в **GitLab Container Registry**, а приложение деплоится в **Kubernetes** через **Helm**.  
 > Инфраструктура под кластер описана в **Terraform**, базовая защита серверов автоматизирована через **Ansible**, а мониторинг реализован через **Prometheus + Grafana + Loki + Promtail + Node Exporter + kube-state-metrics**.
 
-## 2. Что говорить по архитектуре
+## 2. Что по архитектуре
 
 Короткий рассказ:
 
@@ -18,7 +18,7 @@
 4. `worker` нужен как отдельный вспомогательный микросервис для демонстрации взаимодействия сервисов.
 5. Всё это разворачивается в отдельном namespace `mega-coder`.
 
-Если попросят показать реализацию:
+Если хоите узнать реализацию:
 
 - UI: `web/html/index.html`
 - proxy: `web/nginx.conf`
@@ -26,7 +26,7 @@
 - worker: `worker/app/main.py`
 - K8s-манифесты: `helm/mega-coder/templates/`
 
-## 3. Что говорить по CI/CD
+## 3. Что по CI/CD
 
 Коротко:
 
@@ -44,7 +44,7 @@
 - `build_api` / `build_web` / `build_worker`
 - `deploy_helm`
 
-## 4. Что говорить по Docker
+## 4. Что про Docker
 
 Коротко:
 
@@ -60,7 +60,7 @@
 - `worker/Dockerfile`
 - `web/Dockerfile`
 
-## 5. Что говорить по Kubernetes и Helm
+## 5. Что про Kubernetes и Helm
 
 Коротко:
 
@@ -78,7 +78,7 @@
 - `helm/mega-coder/templates/configmap.yaml`
 - `helm/mega-coder/templates/secret.yaml`
 
-## 6. Что говорить по Terraform
+## 6. Что про Terraform
 
 Коротко:
 
@@ -93,7 +93,7 @@
 - `terraform/variables.tf`
 - `terraform/outputs.tf`
 
-## 7. Что говорить по Ansible
+## 7. Что про Ansible
 
 Коротко:
 
@@ -110,7 +110,7 @@
 - `ansible/inventory/hosts.ini.example`
 - `ansible/roles/hardening/tasks/main.yml`
 
-## 8. Что говорить по monitoring
+## 8. Что про monitoring
 
 Коротко:
 
@@ -133,7 +133,7 @@
 - `monitoring/values-kube-prometheus.yaml`
 - `monitoring/values-loki-stack.yaml`
 
-## 9. Самые вероятные вопросы преподавателя
+## 9. Самые вероятные вопросы
 
 ### Почему тут 3+ сервиса?
 
