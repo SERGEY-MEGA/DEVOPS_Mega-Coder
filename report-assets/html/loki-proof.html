@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Loki evidence: live logs from namespace mega-coder</title>
+  
+<style>
+  :root {
+    --bg: #0b1020;
+    --panel: #121a2d;
+    --panel-2: #0f172a;
+    --text: #e5eefb;
+    --muted: #9fb1d0;
+    --accent: #63b3ff;
+    --ok: #32d296;
+    --warn: #ffb454;
+    --border: #26324d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #09111f 0%, #101b31 100%);
+    color: var(--text);
+  }
+  main {
+    width: 1280px;
+    margin: 0 auto;
+    padding: 36px 42px 48px;
+  }
+  h1, h2, h3 { margin: 0 0 16px; }
+  p { margin: 0 0 14px; color: var(--muted); line-height: 1.5; }
+  .hero {
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(18, 26, 45, 0.92);
+    margin-bottom: 22px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .cards-4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .card, .panel {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(18, 26, 45, 0.94);
+    padding: 18px 20px;
+  }
+  .metric-label {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .metric-value {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(50, 210, 150, 0.14);
+    color: var(--ok);
+    border: 1px solid rgba(50, 210, 150, 0.28);
+    font-size: 13px;
+    margin-right: 8px;
+  }
+  .small { font-size: 13px; color: var(--muted); }
+  pre {
+    margin: 0;
+    padding: 16px 18px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 14px;
+  }
+</style>
+
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>Loki evidence: live logs from namespace mega-coder</h1>
+      <p>Живые данные стенда MEGA CODER, зафиксированные 2026-03-26 01:32:01.</p>
+    </section>
+    
+    <section class="panel" style="margin-bottom: 18px;">
+      <h2>Loki / App logs</h2>
+      <p>Логи подтягиваются из <code>promtail</code> в <code>Loki</code> по label <code>namespace=&quot;mega-coder&quot;</code>.</p>
+      <p><span class="pill">api</span><span class="pill">web</span><span class="pill">worker</span></p>
+    </section>
+    <section class="panel">
+      <table>
+        <tr><th>Component</th><th>Pod</th><th>Log line</th></tr>
+        <tr><td><code>api</code></td><td><code>mega-mega-coder-api-864878fc88-4qjvb</code></td><td>INFO:     10.42.0.1:50704 - &quot;GET /ready HTTP/1.1&quot; 200 OK</td></tr><tr><td><code>api</code></td><td><code>mega-mega-coder-api-864878fc88-4qjvb</code></td><td>INFO:     10.42.0.1:56018 - &quot;GET /health HTTP/1.1&quot; 200 OK</td></tr><tr><td><code>api</code></td><td><code>mega-mega-coder-api-864878fc88-4qjvb</code></td><td>INFO:     10.42.0.1:56002 - &quot;GET /ready HTTP/1.1&quot; 200 OK</td></tr><tr><td><code>api</code></td><td><code>mega-mega-coder-api-864878fc88-8mnqn</code></td><td>INFO:     10.42.0.1:54120 - &quot;GET /ready HTTP/1.1&quot; 200 OK</td></tr><tr><td><code>api</code></td><td><code>mega-mega-coder-api-864878fc88-8mnqn</code></td><td>INFO:     10.42.0.1:42512 - &quot;GET /ready HTTP/1.1&quot; 200 OK</td></tr><tr><td><code>web</code></td><td><code>mega-mega-coder-web-78545c7589-49tpg</code></td><td>10.42.0.1 - - [25/Mar/2026:22:28:32 +0000] &quot;GET / HTTP/1.1&quot; 200 1315 &quot;-&quot; &quot;kube-probe/1.34&quot;</td></tr><tr><td><code>web</code></td><td><code>mega-mega-coder-web-78545c7589-49tpg</code></td><td>10.42.0.1 - - [25/Mar/2026:22:28:22 +0000] &quot;GET / HTTP/1.1&quot; 200 1315 &quot;-&quot; &quot;kube-probe/1.34&quot;</td></tr><tr><td><code>web</code></td><td><code>mega-mega-coder-web-78545c7589-49tpg</code></td><td>10.42.0.1 - - [25/Mar/2026:22:28:20 +0000] &quot;GET / HTTP/1.1&quot; 200 1315 &quot;-&quot; &quot;kube-probe/1.34&quot;</td></tr><tr><td><code>web</code></td><td><code>mega-mega-coder-web-78545c7589-4dpmz</code></td><td>10.42.0.1 - - [25/Mar/2026:22:28:34 +0000] &quot;GET / HTTP/1.1&quot; 200 1315 &quot;-&quot; &quot;kube-probe/1.34&quot;</td></tr><tr><td><code>web</code></td><td><code>mega-mega-coder-web-78545c7589-4dpmz</code></td><td>10.42.0.1 - - [25/Mar/2026:22:28:32 +0000] &quot;GET / HTTP/1.1&quot; 200 1315 &quot;-&quot; &quot;kube-probe/1.34&quot;</td></tr><tr><td><code>web</code></td><td><code>mega-mega-coder-web-78545c7589-4dpmz</code></td><td>10.42.0.1 - - [25/Mar/2026:22:28:24 +0000] &quot;GET / HTTP/1.1&quot; 200 1315 &quot;-&quot; &quot;kube-probe/1.34&quot;</td></tr><tr><td><code>worker</code></td><td><code>mega-mega-coder-worker-5cc548f7fc-k7kmm</code></td><td>INFO:     10.42.0.1:43204 - &quot;GET /health HTTP/1.1&quot; 200 OK</td></tr>
+      </table>
+    </section>
+    
+  </main>
+</body>
+</html>

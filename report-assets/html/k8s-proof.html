@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Kubernetes: live cluster evidence</title>
+  
+<style>
+  :root {
+    --bg: #0b1020;
+    --panel: #121a2d;
+    --panel-2: #0f172a;
+    --text: #e5eefb;
+    --muted: #9fb1d0;
+    --accent: #63b3ff;
+    --ok: #32d296;
+    --warn: #ffb454;
+    --border: #26324d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #09111f 0%, #101b31 100%);
+    color: var(--text);
+  }
+  main {
+    width: 1280px;
+    margin: 0 auto;
+    padding: 36px 42px 48px;
+  }
+  h1, h2, h3 { margin: 0 0 16px; }
+  p { margin: 0 0 14px; color: var(--muted); line-height: 1.5; }
+  .hero {
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(18, 26, 45, 0.92);
+    margin-bottom: 22px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .cards-4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .card, .panel {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(18, 26, 45, 0.94);
+    padding: 18px 20px;
+  }
+  .metric-label {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .metric-value {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(50, 210, 150, 0.14);
+    color: var(--ok);
+    border: 1px solid rgba(50, 210, 150, 0.28);
+    font-size: 13px;
+    margin-right: 8px;
+  }
+  .small { font-size: 13px; color: var(--muted); }
+  pre {
+    margin: 0;
+    padding: 16px 18px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 14px;
+  }
+</style>
+
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>Kubernetes: live cluster evidence</h1>
+      <p>Живые данные стенда MEGA CODER, зафиксированные 2026-03-26 01:32:01.</p>
+    </section>
+    
+    <section class="panel" style="margin-bottom: 18px;">
+      <h2>Статус кластера</h2>
+      <p><span class="pill">k3s Ready</span><span class="pill">namespace mega-coder</span><span class="pill">monitoring stack active</span></p>
+      <pre>NAME     STATUS   ROLES           AGE    VERSION        INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+server   Ready    control-plane   128m   v1.34.5+k3s1   192.168.1.29   &lt;none&gt;        Ubuntu 24.04.4 LTS   6.17.0-19-generic   containerd://2.1.5-k3s1</pre>
+    </section>
+    <section class="grid">
+      <div class="panel">
+        <h2>Pods</h2>
+        <p>Подтверждение, что приложение и monitoring работают одновременно.</p>
+        <pre>NAMESPACE     NAME                                                   READY   STATUS    RESTARTS   AGE    IP             NODE     NOMINATED NODE   READINESS GATES
+kube-system   coredns-695cbbfcb9-54zql                               1/1     Running   0          128m   10.42.0.3      server   &lt;none&gt;           &lt;none&gt;
+kube-system   local-path-provisioner-546dfc6456-dd44z                1/1     Running   0          128m   10.42.0.4      server   &lt;none&gt;           &lt;none&gt;
+kube-system   metrics-server-c8774f4f4-hccvr                         1/1     Running   0          128m   10.42.0.2      server   &lt;none&gt;           &lt;none&gt;
+mega-coder    mega-mega-coder-api-864878fc88-4qjvb                   1/1     Running   0          102m   10.42.0.22     server   &lt;none&gt;           &lt;none&gt;
+mega-coder    mega-mega-coder-api-864878fc88-8mnqn                   1/1     Running   0          102m   10.42.0.17     server   &lt;none&gt;           &lt;none&gt;
+mega-coder    mega-mega-coder-redis-56647786b9-tg6cn                 1/1     Running   0          105m   10.42.0.13     server   &lt;none&gt;           &lt;none&gt;
+mega-coder    mega-mega-coder-web-78545c7589-49tpg                   1/1     Running   0          102m   10.42.0.19     server   &lt;none&gt;           &lt;none&gt;
+mega-coder    mega-mega-coder-web-78545c7589-4dpmz                   1/1     Running   0          102m   10.42.0.20     server   &lt;none&gt;           &lt;none&gt;
+mega-coder    mega-mega-coder-worker-5cc548f7fc-k7kmm                1/1     Running   0          102m   10.42.0.21     server   &lt;none&gt;           &lt;none&gt;
+mega-coder    mega-mega-coder-worker-5cc548f7fc-pv8dz                1/1     Running   0          102m   10.42.0.18     server   &lt;none&gt;           &lt;none&gt;
+monitoring    loki-0                                                 1/1     Running   0          97m    10.42.0.32     server   &lt;none&gt;           &lt;none&gt;
+monitoring    loki-promtail-bwk7l                                    1/1     Running   0          97m    10.42.0.31     server   &lt;none&gt;           &lt;none&gt;
+monitoring    monitoring-grafana-545664c67d-btscv                    3/3     Running   0          99m    10.42.0.28     server   &lt;none&gt;           &lt;none&gt;
+monitoring    monitoring-kube-prometheus-operator-7c6d48b497-dq28j   1/1     Running   0          99m    10.42.0.26     server   &lt;none&gt;           &lt;none&gt;
+monitoring    monitoring-kube-state-metrics-5b8ff7679f-rm48w         1/1     Running   0          99m    10.42.0.27     server   &lt;none&gt;           &lt;none&gt;
+monitoring    monitoring-prometheus-node-exporter-x8726              1/1     Running   0          99m    192.168.1.29   server   &lt;none&gt;           &lt;none&gt;
+monitoring    prometheus-monitoring-kube-prometheus-prometheus-0     2/2     Running   0          99m    10.42.0.29     server   &lt;none&gt;           &lt;none&gt;</pre>
+      </div>
+      <div class="panel">
+        <h2>Deployments / Services / ConfigMap / Secret</h2>
+        <p>Срез объектов из namespace <code>mega-coder</code>.</p>
+        <pre>NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mega-mega-coder-api      2/2     2            2           113m
+deployment.apps/mega-mega-coder-redis    1/1     1            1           113m
+deployment.apps/mega-mega-coder-web      2/2     2            2           113m
+deployment.apps/mega-mega-coder-worker   2/2     2            2           113m
+
+NAME                             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/mega-mega-coder-api      ClusterIP   10.43.22.63     &lt;none&gt;        8000/TCP         113m
+service/mega-mega-coder-redis    ClusterIP   10.43.165.90    &lt;none&gt;        6379/TCP         113m
+service/mega-mega-coder-web      NodePort    10.43.147.110   &lt;none&gt;        8080:30080/TCP   113m
+service/mega-mega-coder-worker   ClusterIP   10.43.215.154   &lt;none&gt;        8081/TCP         113m
+
+NAME                               DATA   AGE
+configmap/kube-root-ca.crt         1      113m
+configmap/mega-mega-coder-config   2      113m
+
+NAME                                TYPE                 DATA   AGE
+secret/mega-mega-coder-secret       Opaque               1      113m
+secret/sh.helm.release.v1.mega.v1   helm.sh/release.v1   1      113m
+secret/sh.helm.release.v1.mega.v2   helm.sh/release.v1   1      113m
+secret/sh.helm.release.v1.mega.v3   helm.sh/release.v1   1      105m</pre>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Helm releases</h2>
+      <p>Приложение, Loki и kube-prometheus-stack установлены через Helm.</p>
+      <pre>NAME      	NAMESPACE 	REVISION	UPDATED                                	STATUS  	CHART                        	APP VERSION
+loki      	monitoring	1       	2026-03-25 23:34:46.706831117 +0300 MSK	deployed	loki-stack-2.10.3            	v2.9.3     
+mega      	mega-coder	3       	2026-03-25 23:27:09.538735228 +0300 MSK	deployed	mega-coder-0.1.0             	1.0.0      
+monitoring	monitoring	1       	2026-03-25 23:31:57.395060055 +0300 MSK	deployed	kube-prometheus-stack-82.14.1	v0.89.0</pre>
+    </section>
+    
+  </main>
+</body>
+</html>
