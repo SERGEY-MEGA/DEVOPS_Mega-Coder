@@ -28,7 +28,7 @@ images:
     # Образ с Docker Hub; imageRegistry не наследуем от global (см. _helpers.tpl).
     imageRegistry: docker.io
     repository: library/redis
-    tag: "7.2.4-alpine3.20"
+    tag: "7.2.7-alpine"
     pullPolicy: IfNotPresent
 
 replicaCount:

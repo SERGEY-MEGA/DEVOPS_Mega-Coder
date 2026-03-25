@@ -19,15 +19,17 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# --- Этап 2: runtime — минимальный образ, приложение не от root --------------
-FROM python:3.12.8-alpine3.21 AS runtime
+# --- Этап 2: runtime — slim-образ совместим с wheel'ами из builder -----------
+FROM python:3.12.8-slim-bookworm AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/opt/venv/bin:$PATH"
 
-# Непривилегированный пользователь (ТЗ: не root).
-RUN addgroup -S app && adduser -S app -G app
+# Непривилегированный пользователь с фиксированным UID/GID:
+# runtime оставляем на той же Debian-based платформе, что и builder, чтобы binary wheels работали без конфликтов libc.
+RUN groupadd --system --gid 10001 app \
+    && useradd --system --uid 10001 --gid 10001 --home-dir /app --no-create-home app
 
 WORKDIR /app
 
@@ -35,7 +37,7 @@ WORKDIR /app
 COPY --from=builder /opt/venv /opt/venv
 COPY --chown=app:app app ./app
 
-USER app
+USER 10001:10001
 
 EXPOSE 8000
 

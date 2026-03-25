@@ -5,6 +5,14 @@ prometheus:
   prometheusSpec:
     # Для учебного стенда 7 дней достаточно: метрики не растут бесконечно и не забивают диск.
     retention: 7d
+    resources:
+      # Урезаем аппетиты Prometheus, чтобы monitoring спокойно жил рядом с GitLab на одном сервере.
+      requests:
+        cpu: 100m
+        memory: 384Mi
+      limits:
+        cpu: 500m
+        memory: 768Mi
     # Эти флаги оставляют возможность подключать свои ServiceMonitor/PodMonitor позже.
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
@@ -12,13 +20,29 @@ prometheus:
 grafana:
   enabled: true
   adminPassword: "change-me-in-gitlab-or-helm" # в проде задать через --set или External Secret
+  resources:
+    # Grafana нужна для дашбордов, но для demo ей достаточно небольших ресурсов.
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
   persistence:
     enabled: false
   service:
     type: ClusterIP
+  additionalDataSources:
+    # Loki регистрируем в уже существующей Grafana, чтобы логи смотреть в одном интерфейсе.
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki:3100
+      isDefault: false
 
 alertmanager:
-  enabled: true
+  # Для защиты и демо обязателен не Alertmanager, а сбор метрик/логов и дашборды.
+  enabled: false
 
 nodeExporter:
   # Системные метрики хостов: CPU, RAM, filesystem, network.
@@ -27,6 +51,22 @@ nodeExporter:
 kubeStateMetrics:
   # Состояние Kubernetes-объектов: pods, deployments, replicasets и т.д.
   enabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 150m
+      memory: 128Mi
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
 
 defaultRules:
   create: true

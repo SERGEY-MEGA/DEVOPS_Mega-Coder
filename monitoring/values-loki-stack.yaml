@@ -6,6 +6,13 @@ loki:
   persistence:
     # Для demo достаточно ephemeral storage; для production лучше выносить данные во внешний storage.
     enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
   config:
     schema_config:
       configs:
@@ -20,6 +27,13 @@ loki:
 promtail:
   # Promtail читает container logs на нодах и отправляет их в Loki.
   enabled: true
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
 
 grafana:
   # Вторую Grafana не поднимаем, потому что она уже есть в kube-prometheus-stack.

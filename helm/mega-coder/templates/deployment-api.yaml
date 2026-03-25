@@ -23,9 +23,12 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      # Ограничение прав на уровне Pod; UID задаёт образ (USER app в Dockerfile).
+      # Ограничение прав на уровне Pod; UID/GID совпадают с фиксированным non-root пользователем из Dockerfile.
       securityContext:
         runAsNonRoot: true
+        # Явный UID/GID убирает неоднозначность при проверке Kubernetes admission/kubelet.
+        runAsUser: 10001
+        runAsGroup: 10001
       containers:
         - name: api
           # Образ и tag приходят из GitLab CI/CD при helm upgrade --install.

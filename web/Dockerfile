@@ -3,11 +3,11 @@ FROM nginx:1.27.3-alpine3.20 AS builder
 WORKDIR /tmp
 COPY nginx.conf /tmp/nginx.conf.template
 
-# runtime: alpine + gettext (envsubst) + su-exec (сброс прав на nginx).
+# runtime: alpine + gettext для envsubst, без лишних root-переходов на старте.
 FROM nginx:1.27.3-alpine3.20 AS runtime
 
-# gettext нужен для envsubst, su-exec — для запуска nginx не от root, wget — для healthcheck.
-RUN apk add --no-cache gettext su-exec wget
+# gettext нужен для envsubst, wget — для healthcheck.
+RUN apk add --no-cache gettext wget
 
 COPY --from=builder /tmp/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY docker-entrypoint.sh /docker-entrypoint.sh
@@ -17,6 +17,9 @@ COPY html /usr/share/nginx/html
 RUN chmod +x /docker-entrypoint.sh \
     && chown -R nginx:nginx /usr/share/nginx/html /var/cache/nginx \
     && install -d -o nginx -g nginx /tmp/nginx-client-body
+
+# Фиксируем числовой UID/GID стандартного пользователя nginx, чтобы Pod с runAsNonRoot стартовал предсказуемо.
+USER 101:101
 
 EXPOSE 8080
 

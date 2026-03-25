@@ -23,8 +23,12 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      # Для frontend используем системного пользователя nginx, но тоже фиксируем UID/GID явно.
       securityContext:
         runAsNonRoot: true
+        # Для nginx используем фиксированный системный UID/GID из базового alpine-образа.
+        runAsUser: 101
+        runAsGroup: 101
       containers:
         - name: web
           # Этот контейнер отвечает за UI и проксирование /api/, а не за бизнес-логику приложения.
