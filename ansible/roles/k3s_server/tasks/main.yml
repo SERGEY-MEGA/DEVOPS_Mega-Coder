@@ -1,0 +1,56 @@
+---
+# Роль ставит control-plane ноду k3s.
+# Почему k3s: для учебного стенда это самый простой путь получить живой Kubernetes-кластер из 2 ВМ.
+
+- name: Установить зависимости для k3s server
+  ansible.builtin.apt:
+    name:
+      - curl
+      - ca-certificates
+    state: present
+    update_cache: true
+
+- name: Скачать официальный installer k3s
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /usr/local/bin/install-k3s.sh
+    mode: "0755"
+
+- name: Установить k3s server
+  ansible.builtin.shell: |
+    INSTALL_K3S_VERSION="{{ k3s_version }}" \
+    INSTALL_K3S_EXEC="server --write-kubeconfig-mode 644 --node-ip {{ ansible_default_ipv4.address }}{% if k3s_disable_traefik %} --disable=traefik{% endif %}{% if k3s_disable_servicelb %} --disable=servicelb{% endif %}" \
+    /usr/local/bin/install-k3s.sh
+  args:
+    creates: /etc/systemd/system/k3s.service
+
+- name: Убедиться, что k3s service запущен
+  ansible.builtin.service:
+    name: k3s
+    state: started
+    enabled: true
+
+- name: Дождаться kubeconfig на master
+  ansible.builtin.wait_for:
+    path: /etc/rancher/k3s/k3s.yaml
+    timeout: 180
+
+- name: Дождаться node-token на master
+  ansible.builtin.wait_for:
+    path: /var/lib/rancher/k3s/server/node-token
+    timeout: 180
+
+- name: Прочитать token для подключения worker
+  ansible.builtin.slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: k3s_server_token_raw
+
+- name: Сохранить token в hostvars master
+  ansible.builtin.set_fact:
+    k3s_server_token: "{{ k3s_server_token_raw.content | b64decode | trim }}"
+
+- name: Дождаться Kubernetes API на master
+  ansible.builtin.wait_for:
+    host: "{{ ansible_default_ipv4.address }}"
+    port: 6443
+    timeout: 180

@@ -11,6 +11,9 @@
 | `REPORT.md` | Полный отчёт по курсовому проекту под ТЗ. |
 | `PROJECT_MAP.md` | Эта карта репозитория: что где лежит. |
 | `DEFENSE_GUIDE.md` | Шпаргалка для устной защиты проекта. |
+| `LIVE_DEMO.md` | Как показывать уже поднятый локальный стенд. |
+| `STRICT_VARIANT.md` | Как запускать и объяснять строгий вариант `master + worker`. |
+| `PITCH_5MIN.md` | Готовый текст короткого выступления. |
 
 ## 2. Приложение
 
@@ -132,6 +135,9 @@ Frontend + reverse proxy.
 | `ansible/inventory/hosts.ini.example` | Пример inventory для master и worker. |
 | `ansible/roles/hardening/tasks/main.yml` | Харднинг: apt upgrade, SSH hardening, UFW, auditd, sysctl. |
 | `ansible/roles/hardening/handlers/main.yml` | Перезапуск `sshd` и `auditd` при изменениях. |
+| `ansible/k3s-cluster.yml` | Поднимает строгий вариант кластера: `k3s server` на master и `k3s agent` на worker. |
+| `ansible/roles/k3s_server/tasks/main.yml` | Автоматизация установки control-plane ноды. |
+| `ansible/roles/k3s_agent/tasks/main.yml` | Автоматизация подключения worker к master. |
 
 Что показывать на защите:
 - `site.yml`

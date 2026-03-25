@@ -168,7 +168,21 @@
 В Dockerfile:
 - `api/Dockerfile`
 - `worker/Dockerfile`
-- `web/docker-entrypoint.sh` + запуск через `su-exec nginx`
+- `web/Dockerfile` + запуск процесса от пользователя `nginx`
+
+### Почему вживую показан один сервер, если в ТЗ master + worker?
+
+Короткий ответ:
+
+> Для быстрой живой демонстрации я поднял single-node `k3s` на локальном сервере.
+> Но строгий вариант под ТЗ у меня тоже есть в коде: `terraform/main.tf` создаёт две ВМ, а `ansible/k3s-cluster.yml` поднимает `k3s server` на master и `k3s agent` на worker.
+
+Что показать:
+
+- `terraform/main.tf`
+- `ansible/k3s-cluster.yml`
+- `ansible/roles/k3s_server/tasks/main.yml`
+- `ansible/roles/k3s_agent/tasks/main.yml`
 
 ### Почему Ansible не поднимает БД?
 

@@ -1,0 +1,45 @@
+---
+# Роль подключает worker к уже поднятому master.
+
+- name: Установить зависимости для k3s agent
+  ansible.builtin.apt:
+    name:
+      - curl
+      - ca-certificates
+    state: present
+    update_cache: true
+
+- name: Скачать официальный installer k3s
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /usr/local/bin/install-k3s.sh
+    mode: "0755"
+
+- name: Проверить, что token от master доступен
+  ansible.builtin.assert:
+    that:
+      - hostvars[groups['k8s_master'][0]].k3s_server_token is defined
+      - hostvars[groups['k8s_master'][0]].k3s_server_token | length > 0
+    fail_msg: "На master не найден k3s_server_token. Сначала выполните роль k3s_server."
+
+- name: Установить k3s agent
+  ansible.builtin.shell: |
+    K3S_URL="https://{{ hostvars[groups['k8s_master'][0]].ansible_default_ipv4.address }}:6443" \
+    K3S_TOKEN="{{ hostvars[groups['k8s_master'][0]].k3s_server_token }}" \
+    INSTALL_K3S_VERSION="{{ k3s_version }}" \
+    INSTALL_K3S_EXEC="agent --node-ip {{ ansible_default_ipv4.address }}" \
+    /usr/local/bin/install-k3s.sh
+  args:
+    creates: /etc/systemd/system/k3s-agent.service
+
+- name: Убедиться, что k3s-agent service запущен
+  ansible.builtin.service:
+    name: k3s-agent
+    state: started
+    enabled: true
+
+- name: Дождаться, пока agent подключится к master API
+  ansible.builtin.wait_for:
+    host: "{{ hostvars[groups['k8s_master'][0]].ansible_default_ipv4.address }}"
+    port: 6443
+    timeout: 180
