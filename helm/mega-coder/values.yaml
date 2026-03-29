@@ -41,6 +41,9 @@ replicaCount:
 service:
   # В базовом варианте достаточно ClusterIP; внешний доступ можно дать через Ingress или port-forward.
   type: ClusterIP
+  # Для live-demo стенда web публикуем как NodePort, чтобы UI открывался без дополнительных port-forward.
+  webType: NodePort
+  webNodePort: 30080
   webPort: 8080
   apiPort: 8000
   workerPort: 8081

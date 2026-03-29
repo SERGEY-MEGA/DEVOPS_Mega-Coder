@@ -290,6 +290,9 @@ Job-ы:
 - образы пушатся в GitLab Container Registry;
 - включён `Kaniko cache` для ускорения повторных сборок.
 
+Для локального self-hosted стенда GitLab Container Registry опубликован на `192.168.1.29:5050`,
+а pipeline использует self-hosted Docker runner `server-docker-runner`.
+
 ### 4.4 `deploy`
 
 Job `deploy_helm`:

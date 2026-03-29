@@ -37,6 +37,12 @@
 - `KUBE_CONFIG` — тип **File**, содержимое `kubeconfig`.
 - `APP_SHARED_SECRET` — произвольная строка (masked), попадёт в Kubernetes Secret.
 
+На локальном self-hosted GitLab стенде уже настроены:
+
+- project runner `server-docker-runner` (Docker executor);
+- GitLab Container Registry `192.168.1.29:5050`;
+- обязательные variables `KUBE_CONFIG` и `APP_SHARED_SECRET`.
+
 Pipeline: **pre_build** → **build** (три образа) → **deploy** (только ветка `main`).  
 Дополнительно включены:
 
