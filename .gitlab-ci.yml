@@ -60,6 +60,7 @@ build_api:
         --context "${CI_PROJECT_DIR}/api" \
         --dockerfile "${CI_PROJECT_DIR}/api/Dockerfile" \
         --destination "${CI_REGISTRY_IMAGE}/api:${IMAGE_TAG}" \
+        --insecure-registry "${CI_REGISTRY}" \
         --cache=true \
         --cache-repo "${KANIKO_CACHE_REPO}"
 
@@ -72,6 +73,7 @@ build_web:
         --context "${CI_PROJECT_DIR}/web" \
         --dockerfile "${CI_PROJECT_DIR}/web/Dockerfile" \
         --destination "${CI_REGISTRY_IMAGE}/web:${IMAGE_TAG}" \
+        --insecure-registry "${CI_REGISTRY}" \
         --cache=true \
         --cache-repo "${KANIKO_CACHE_REPO}"
 
@@ -84,6 +86,7 @@ build_worker:
         --context "${CI_PROJECT_DIR}/worker" \
         --dockerfile "${CI_PROJECT_DIR}/worker/Dockerfile" \
         --destination "${CI_REGISTRY_IMAGE}/worker:${IMAGE_TAG}" \
+        --insecure-registry "${CI_REGISTRY}" \
         --cache=true \
         --cache-repo "${KANIKO_CACHE_REPO}"
 
