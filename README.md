@@ -10,9 +10,12 @@
 - **[REPORT.md](./REPORT.md)** — полный отчёт по проекту.
 - **[PROJECT_MAP.md](./PROJECT_MAP.md)** — где лежит код и что делает каждая папка.
 - **[DEFENSE_GUIDE.md](./DEFENSE_GUIDE.md)** — шпаргалка для устной защиты.
+- **[DEFENSE_2MIN.md](./DEFENSE_2MIN.md)** — сверхкороткий сценарий защиты на 2 минуты.
 - **[LIVE_DEMO.md](./LIVE_DEMO.md)** — готовый сценарий показа уже поднятого стенда.
 - **[STRICT_VARIANT.md](./STRICT_VARIANT.md)** — строгий путь под ТЗ с `master + worker`.
 - **[PITCH_5MIN.md](./PITCH_5MIN.md)** — готовый текст выступления на 3-5 минут.
+- **[TZ_CHECKLIST.md](./TZ_CHECKLIST.md)** — сверка проекта с пунктами ТЗ.
+- **[DEVOPS_THEORY.md](./DEVOPS_THEORY.md)** — отдельная теория по DevOps, GitLab, YAML, CI/CD, Docker, Kubernetes, Helm, Terraform, Ansible и monitoring.
 
 ## Быстрые команды
 

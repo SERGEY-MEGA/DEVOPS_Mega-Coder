@@ -11,9 +11,12 @@
 | `REPORT.md` | Полный отчёт по курсовому проекту под ТЗ. |
 | `PROJECT_MAP.md` | Эта карта репозитория: что где лежит. |
 | `DEFENSE_GUIDE.md` | Шпаргалка для устной защиты проекта. |
+| `DEFENSE_2MIN.md` | Короткий сценарий защиты на 2 минуты. |
 | `LIVE_DEMO.md` | Как показывать уже поднятый локальный стенд. |
 | `STRICT_VARIANT.md` | Как запускать и объяснять строгий вариант `master + worker`. |
 | `PITCH_5MIN.md` | Готовый текст короткого выступления. |
+| `TZ_CHECKLIST.md` | Сверка проекта с каждым пунктом ТЗ. |
+| `DEVOPS_THEORY.md` | Теоретическая шпаргалка по DevOps, GitLab, YAML, CI/CD, Docker, Kubernetes, Helm, Terraform, Ansible и monitoring. |
 
 ## 2. Приложение
 
