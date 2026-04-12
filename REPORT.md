@@ -521,42 +521,57 @@ Job `deploy_helm`:
 
 ---
 
-## 13. Скриншоты рабочего стенда
+## 13. Скриншоты и evidence рабочего стенда
 
-Ниже зафиксированы скриншоты с реально работающего демо-стенда. Для backend, Kubernetes, Prometheus и Loki использованы живые данные, полученные непосредственно с сервера `192.168.1.29` на момент подготовки отчёта.
+Ниже зафиксированы скриншоты и evidence-страницы с реально работающего демо-стенда. Часть изображений — это не прямой UI приложения/Grafana, а аккуратные HTML evidence-страницы, собранные из живых данных сервера `192.168.1.29` на момент подготовки отчёта (`2026-03-26`). Они сохранены в репозитории, чтобы в отчёте были читаемые доказательства по backend, Kubernetes, Prometheus и Loki.
+
+Актуальная проверка live-стенда перед сдачей (`2026-04-13`):
+
+| Компонент | Текущий факт |
+|-----------|--------------|
+| GitLab | `http://192.168.1.29:8080/users/sign_in` отвечает `200 OK` |
+| Frontend | `http://192.168.1.29:30080` отвечает `200 OK` |
+| Backend API | `http://192.168.1.29:30080/api/info` отвечает `200 OK` и возвращает JSON |
+| Grafana | `http://192.168.1.29:30030/login` отвечает `200 OK` |
+| Kubernetes | нода `server` в статусе `Ready`, версия `v1.34.5+k3s1` |
+| Приложение | `api`, `web`, `worker` по `2/2`, `redis` `1/1` |
+| Helm | release `mega` в namespace `mega-coder`, revision `8`, status `deployed` |
+| Monitoring | releases `monitoring` и `loki` в статусе `deployed`; pod'ы monitoring namespace `Running` |
 
 ### 13.1 Frontend
 
-Фронтенд-сервис доступен по NodePort и подтверждает выполнение требования ТЗ про UI-интерфейс.
+Фронтенд-сервис доступен по NodePort и подтверждает выполнение требования ТЗ про UI-интерфейс. На актуальном live-стенде открывать: `http://192.168.1.29:30080`.
 
 ![Frontend UI](report-assets/screenshots/frontend-ui.png)
 
 ### 13.2 Backend API
 
-Backend отвечает на endpoint `/api/info`, а frontend успешно отдает HTTP `200 OK`.
+Backend отвечает на endpoint `/api/info`, а frontend успешно отдает HTTP `200 OK`. Скрин ниже — evidence-страница, собранная из live-данных; на защите можно дополнительно открыть живой endpoint `http://192.168.1.29:30080/api/info`.
 
 ![Backend proof](report-assets/screenshots/backend-proof.png)
 
 ### 13.3 Kubernetes / k3s
 
-На скриншоте ниже видны:
+На evidence-скриншоте ниже видны:
 
 - нода кластера `k3s` в статусе `Ready`;
 - pod'ы приложения и monitoring;
 - объекты `Deployment`, `Service`, `ConfigMap`, `Secret`;
 - Helm releases для приложения и monitoring stack.
 
+Важно: скриншот был снят на раннем состоянии стенда; перед сдачей live-стенд обновлён, поэтому возраст pod'ов и Helm revision могут отличаться. Это ожидаемо: актуальное состояние указано в таблице выше.
+
 ![Kubernetes proof](report-assets/screenshots/k8s-proof.png)
 
 ### 13.4 Grafana UI
 
-Grafana web UI поднята и доступна на локальном сервере.
+Grafana web UI поднята и доступна на локальном сервере. На защите открывать: `http://192.168.1.29:30030`.
 
 ![Grafana login](report-assets/screenshots/grafana-login.png)
 
 ### 13.5 Monitoring stack
 
-Ниже показаны живые метрики из Prometheus и kube-state-metrics, которые используются в Grafana dashboard'ах:
+Ниже показана evidence-страница с живыми метриками Prometheus и kube-state-metrics, которые используются в Grafana dashboard'ах:
 
 - количество доступных scrape-target;
 - загрузка CPU;
@@ -568,7 +583,7 @@ Grafana web UI поднята и доступна на локальном сер
 
 ### 13.6 Loki / application logs
 
-Ниже показаны реальные логи, собранные `Promtail` и доступные через `Loki` по namespace `mega-coder`. В выборке присутствуют логи `api`, `web` и `worker`.
+Ниже показана evidence-страница с реальными логами, собранными `Promtail` и доступными через `Loki` по namespace `mega-coder`. В выборке присутствуют логи `api`, `web` и `worker`.
 
 ![Loki proof](report-assets/screenshots/loki-proof.png)
 
