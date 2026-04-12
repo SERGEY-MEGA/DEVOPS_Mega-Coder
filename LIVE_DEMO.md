@@ -12,6 +12,7 @@
 
 - Приложение: `http://192.168.1.29:30080`
 - Grafana: `http://192.168.1.29:30030`
+- DevOps dashboard: `http://192.168.1.29:30030/d/mega-coder-devops/mega-coder-devops-overview`
 - Logs dashboard: `http://192.168.1.29:30030/d/mega-coder-logs/mega-coder-app-logs`
 - GitLab: `http://192.168.1.29:8080/MEGA/deveps-mega-coder`
 
@@ -68,9 +69,10 @@ k3s kubectl logs -n mega-coder deploy/mega-mega-coder-worker --tail=20
 2. Нажать кнопку `Загрузить данные с API`
 3. `http://192.168.1.29:30030`
 4. В Grafana открыть:
-   - `Node Exporter / Nodes`
-   - `Kubernetes / Compute Resources / Namespace (Pods)`
-   - `MEGA CODER / App Logs`
+   - `MEGA CODER / DevOps Overview`
+   - `MEGA CODER / App Logs`, если нужно отдельно показать Loki-логи
+
+Стандартные dashboards Grafana открывать не обязательно: в single-node k3s часть чужих панелей может быть пустой. Для ТЗ достаточно подготовленного dashboard `MEGA CODER / DevOps Overview`, потому что он показывает system metrics, Kubernetes replicas и Loki logs.
 
 ## Лучший порядок показа на защите
 
@@ -83,11 +85,9 @@ k3s kubectl logs -n mega-coder deploy/mega-mega-coder-worker --tail=20
 7. Открыть приложение: `http://192.168.1.29:30080`.
 8. Нажать `Загрузить данные с API`, затем при желании открыть `http://192.168.1.29:30080/api/info`.
 9. Открыть Grafana: `http://192.168.1.29:30030`.
-10. В Grafana показать три экрана:
-    - `Node Exporter / Nodes`
-    - `Kubernetes / Compute Resources / Namespace (Pods)`
-    - `MEGA CODER / App Logs`
-11. Если спросят про строгий вариант ТЗ, открыть [STRICT_VARIANT.md](/Users/sergejmegeran/Desktop/devops%20peresdacha/STRICT_VARIANT.md) и показать `terraform/` + `ansible/k3s-cluster.yml`.
+10. В Grafana открыть `MEGA CODER / DevOps Overview`: там уже собраны CPU/RAM/Disk/Network, pod count, deployment replicas и Loki logs.
+11. Если преподаватель хочет отдельный логовый экран, открыть `MEGA CODER / App Logs`.
+12. Если спросят про строгий вариант ТЗ, открыть [STRICT_VARIANT.md](/Users/sergejmegeran/Desktop/devops%20peresdacha/STRICT_VARIANT.md) и показать `terraform/` + `ansible/k3s-cluster.yml`.
 
 ## Как быстро поднять стенд заново и показать
 

@@ -444,6 +444,7 @@ Job `deploy_helm`:
 | `monitoring/README.md` | Команды установки и базовые шаги |
 | `monitoring/values-kube-prometheus.yaml` | Prometheus, Grafana, Node Exporter, kube-state-metrics |
 | `monitoring/values-loki-stack.yaml` | Loki и Promtail |
+| `monitoring/grafana-dashboard-mega-coder.json` | Готовый dashboard `MEGA CODER / DevOps Overview` для показа на защите |
 
 ### 9.1 Дашборды по ТЗ
 
@@ -452,6 +453,8 @@ Job `deploy_helm`:
 1. Системный дашборд: CPU, RAM, Disk, Network.
 2. Kubernetes dashboard: pod/deployment/replica state.
 3. Логи приложения: Loki Explore или dashboard по namespace `mega-coder`.
+
+Для защиты подготовлен отдельный dashboard `MEGA CODER / DevOps Overview`, чтобы не открывать случайные стандартные dashboards Grafana, где часть панелей может быть пустой в single-node k3s. Этот dashboard показывает только нужные по ТЗ данные: Node Exporter metrics, kube-state-metrics и Loki logs.
 
 ### 9.2 Что приложить к отчёту
 
@@ -523,7 +526,7 @@ Job `deploy_helm`:
 
 ## 13. Скриншоты и evidence рабочего стенда
 
-Ниже зафиксированы скриншоты и evidence-страницы с реально работающего демо-стенда. Часть изображений — это не прямой UI приложения/Grafana, а аккуратные HTML evidence-страницы, собранные из живых данных сервера `192.168.1.29` на момент подготовки отчёта (`2026-03-26`). Они сохранены в репозитории, чтобы в отчёте были читаемые доказательства по backend, Kubernetes, Prometheus и Loki.
+Ниже зафиксированы скриншоты и evidence-страницы с реально работающего демо-стенда. Скриншоты пересобраны перед сдачей из текущих live-данных сервера `192.168.1.29`, чтобы отчет совпадал с тем, что открывается в браузере.
 
 Актуальная проверка live-стенда перед сдачей (`2026-04-13`):
 
@@ -535,18 +538,25 @@ Job `deploy_helm`:
 | Grafana | `http://192.168.1.29:30030/login` отвечает `200 OK` |
 | Kubernetes | нода `server` в статусе `Ready`, версия `v1.34.5+k3s1` |
 | Приложение | `api`, `web`, `worker` по `2/2`, `redis` `1/1` |
-| Helm | release `mega` в namespace `mega-coder`, revision `8`, status `deployed` |
+| Helm | release `mega` в namespace `mega-coder`, revision `10`, status `deployed` |
 | Monitoring | releases `monitoring` и `loki` в статусе `deployed`; pod'ы monitoring namespace `Running` |
+| Grafana dashboard | `MEGA CODER / DevOps Overview` импортирован и доступен по `/d/mega-coder-devops/mega-coder-devops-overview` |
 
-### 13.1 Frontend
+### 13.1 Frontend + Backend UI
 
 Фронтенд-сервис доступен по NodePort и подтверждает выполнение требования ТЗ про UI-интерфейс. На актуальном live-стенде открывать: `http://192.168.1.29:30080`.
 
+На странице видно оба слоя приложения: `frontend` и `backend`. Кнопка `Обновить ответ API` делает запрос на `/api/info`, а ответ backend выводится прямо в UI.
+
 ![Frontend UI](report-assets/screenshots/frontend-ui.png)
 
-### 13.2 Backend API
+### 13.2 Raw Backend API
 
-Backend отвечает на endpoint `/api/info`, а frontend успешно отдает HTTP `200 OK`. Скрин ниже — evidence-страница, собранная из live-данных; на защите можно дополнительно открыть живой endpoint `http://192.168.1.29:30080/api/info`.
+Backend отвечает на endpoint `/api/info`, а frontend reverse proxy успешно проксирует этот путь в backend-сервис. На защите можно открыть живой endpoint `http://192.168.1.29:30080/api/info`; он специально выглядит как raw JSON, потому что это API, а не UI-страница.
+
+![Backend API](report-assets/screenshots/backend-api.png)
+
+Дополнительно ниже сохранена evidence-страница с HTTP-заголовками frontend и JSON backend:
 
 ![Backend proof](report-assets/screenshots/backend-proof.png)
 
@@ -559,19 +569,22 @@ Backend отвечает на endpoint `/api/info`, а frontend успешно �
 - объекты `Deployment`, `Service`, `ConfigMap`, `Secret`;
 - Helm releases для приложения и monitoring stack.
 
-Важно: скриншот был снят на раннем состоянии стенда; перед сдачей live-стенд обновлён, поэтому возраст pod'ов и Helm revision могут отличаться. Это ожидаемо: актуальное состояние указано в таблице выше.
-
 ![Kubernetes proof](report-assets/screenshots/k8s-proof.png)
 
-### 13.4 Grafana UI
+### 13.4 Grafana UI и dashboard для защиты
 
 Grafana web UI поднята и доступна на локальном сервере. На защите открывать: `http://192.168.1.29:30030`.
+
+Логин: `admin`  
+Пароль: `MegaGrafana2026`
+
+Важно: стандартных dashboards в Grafana много, и часть панелей может быть пустой из-за single-node k3s или неподходящего выбора переменных. Это не проблема для ТЗ. Для защиты открывать подготовленный dashboard `MEGA CODER / DevOps Overview`, потому что он показывает только реальные метрики и логи текущего стенда.
 
 ![Grafana login](report-assets/screenshots/grafana-login.png)
 
 ### 13.5 Monitoring stack
 
-Ниже показана evidence-страница с живыми метриками Prometheus и kube-state-metrics, которые используются в Grafana dashboard'ах:
+Ниже показана evidence-страница с живыми метриками Prometheus и kube-state-metrics, которые используются в Grafana dashboard `MEGA CODER / DevOps Overview`:
 
 - количество доступных scrape-target;
 - загрузка CPU;

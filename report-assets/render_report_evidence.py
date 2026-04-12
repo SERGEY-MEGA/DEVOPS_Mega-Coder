@@ -180,6 +180,7 @@ def build_k8s_page() -> None:
     pods = parts[1] if len(parts) > 1 else ""
     workloads = parts[2] if len(parts) > 2 else ""
     releases = parts[3] if len(parts) > 3 else ""
+    monitoring_pods = parts[4] if len(parts) > 4 else ""
 
     body = f"""
     <section class="panel" style="margin-bottom: 18px;">
@@ -203,6 +204,11 @@ def build_k8s_page() -> None:
       <h2>Helm releases</h2>
       <p>Приложение, Loki и kube-prometheus-stack установлены через Helm.</p>
       <pre>{escape(releases)}</pre>
+    </section>
+    <section class="panel" style="margin-top: 18px;">
+      <h2>Monitoring pods</h2>
+      <p>Подтверждение, что Prometheus, Grafana, Loki, Promtail, Node Exporter и kube-state-metrics работают в namespace <code>monitoring</code>.</p>
+      <pre>{escape(monitoring_pods)}</pre>
     </section>
     """
     render_page("Kubernetes: live cluster evidence", body, "k8s-proof.html")
@@ -255,7 +261,8 @@ def build_monitoring_page() -> None:
     </section>
     <section class="panel">
       <h2>Grafana dashboards used in demo</h2>
-      <p><code>Node Exporter / Nodes</code>, <code>Kubernetes / Compute Resources / Namespace (Pods)</code>, <code>MEGA CODER / App Logs</code>.</p>
+      <p><code>MEGA CODER / DevOps Overview</code> — основной dashboard для защиты: system metrics, Kubernetes replicas и Loki logs в одном месте.</p>
+      <p><code>MEGA CODER / App Logs</code> — отдельный dashboard с логами приложения, если нужно показать Loki подробнее.</p>
       <p class="small">URL Grafana: <code>http://192.168.1.29:30030</code></p>
     </section>
     """

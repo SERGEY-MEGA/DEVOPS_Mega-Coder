@@ -45,9 +45,10 @@ k3s kubectl get deploy,svc,cm,secret -n mega-coder
 5. Логин: `admin`
 6. Пароль: `MegaGrafana2026`
 7. Показать:
-   - `Node Exporter / Nodes`
-   - `Kubernetes / Compute Resources / Namespace (Pods)`
-   - `MEGA CODER / App Logs`
+   - `MEGA CODER / DevOps Overview`
+   - `MEGA CODER / App Logs`, если попросят отдельно показать Loki
+
+Если в стандартных dashboards Grafana есть пустые панели, их не открывать: для сдачи подготовлен отдельный dashboard `MEGA CODER / DevOps Overview`, где собраны нужные по ТЗ CPU/RAM/Disk/Network, Kubernetes replicas и Loki logs.
 
 ## 5. Финальная фраза
 

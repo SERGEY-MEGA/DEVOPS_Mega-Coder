@@ -111,14 +111,14 @@
   <main>
     <section class="hero">
       <h1>Monitoring evidence: Prometheus + Grafana datasources</h1>
-      <p>Живые данные стенда MEGA CODER, зафиксированные 2026-03-26 01:32:01.</p>
+      <p>Живые данные стенда MEGA CODER, зафиксированные 2026-04-13 01:48:09.</p>
     </section>
     
     <section class="cards-4">
       <div class="card"><div class="metric-label">Prometheus targets up</div><div class="metric-value">10</div></div>
-      <div class="card"><div class="metric-label">CPU used</div><div class="metric-value">7.38%</div></div>
-      <div class="card"><div class="metric-label">Memory available</div><div class="metric-value">33.92%</div></div>
-      <div class="card"><div class="metric-label">Disk available on /</div><div class="metric-value">186.0 GB</div></div>
+      <div class="card"><div class="metric-label">CPU used</div><div class="metric-value">8.44%</div></div>
+      <div class="card"><div class="metric-label">Memory available</div><div class="metric-value">35.23%</div></div>
+      <div class="card"><div class="metric-label">Disk available on /</div><div class="metric-value">163.9 GB</div></div>
     </section>
     <section class="grid">
       <div class="panel">
@@ -127,10 +127,10 @@
         <table>
           <tr><th>Metric</th><th>Value</th></tr>
           <tr><td><code>sum(up)</code></td><td>10</td></tr>
-          <tr><td><code>CPU used</code></td><td>7.38%</td></tr>
-          <tr><td><code>Memory available</code></td><td>33.92%</td></tr>
-          <tr><td><code>Disk available</code></td><td>186.0 GB</td></tr>
-          <tr><td><code>Network receive rate</code></td><td>24.17 KB/s</td></tr>
+          <tr><td><code>CPU used</code></td><td>8.44%</td></tr>
+          <tr><td><code>Memory available</code></td><td>35.23%</td></tr>
+          <tr><td><code>Disk available</code></td><td>163.9 GB</td></tr>
+          <tr><td><code>Network receive rate</code></td><td>34.13 KB/s</td></tr>
         </table>
       </div>
       <div class="panel">
@@ -139,13 +139,14 @@
         <p class="small">Общее количество pod в namespace: <strong>7</strong></p>
         <table>
           <tr><th>Deployment</th><th>Available replicas</th></tr>
-          <tr><td><code>mega-mega-coder-web</code></td><td>2</td></tr><tr><td><code>mega-mega-coder-worker</code></td><td>2</td></tr><tr><td><code>mega-mega-coder-api</code></td><td>2</td></tr><tr><td><code>mega-mega-coder-redis</code></td><td>1</td></tr>
+          <tr><td><code>mega-mega-coder-redis</code></td><td>1</td></tr><tr><td><code>mega-mega-coder-worker</code></td><td>2</td></tr><tr><td><code>mega-mega-coder-web</code></td><td>2</td></tr><tr><td><code>mega-mega-coder-api</code></td><td>2</td></tr>
         </table>
       </div>
     </section>
     <section class="panel">
       <h2>Grafana dashboards used in demo</h2>
-      <p><code>Node Exporter / Nodes</code>, <code>Kubernetes / Compute Resources / Namespace (Pods)</code>, <code>MEGA CODER / App Logs</code>.</p>
+      <p><code>MEGA CODER / DevOps Overview</code> — основной dashboard для защиты: system metrics, Kubernetes replicas и Loki logs в одном месте.</p>
+      <p><code>MEGA CODER / App Logs</code> — отдельный dashboard с логами приложения, если нужно показать Loki подробнее.</p>
       <p class="small">URL Grafana: <code>http://192.168.1.29:30030</code></p>
     </section>
     

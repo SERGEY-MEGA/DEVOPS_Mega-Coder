@@ -157,6 +157,7 @@ Frontend + reverse proxy.
 |------|-------------|
 | `monitoring/README.md` | Пошаговая инструкция по установке Prometheus, Grafana, Loki, Promtail. |
 | `monitoring/values-kube-prometheus.yaml` | Значения для kube-prometheus-stack: Prometheus, Grafana, Node Exporter, kube-state-metrics. |
+| `monitoring/grafana-dashboard-mega-coder.json` | Готовый Grafana dashboard для защиты: system metrics, Kubernetes replicas и Loki logs. |
 | `monitoring/values-loki-stack.yaml` | Значения для Loki + Promtail. |
 
 Что показывать на защите:
