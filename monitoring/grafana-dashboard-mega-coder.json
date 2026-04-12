@@ -3,6 +3,7 @@
     "id": null,
     "uid": "mega-coder-devops",
     "title": "MEGA CODER / DevOps Overview",
+    "description": "Учебный dashboard для защиты: в одном месте показывает Node Exporter system metrics, kube-state-metrics по deployment'ам и Loki logs приложения MEGA CODER.",
     "tags": ["mega-coder", "devops", "course"],
     "timezone": "browser",
     "schemaVersion": 39,

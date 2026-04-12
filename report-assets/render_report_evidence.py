@@ -11,7 +11,7 @@ EVIDENCE = ROOT / "evidence"
 HTML_DIR = ROOT / "html"
 HTML_DIR.mkdir(parents=True, exist_ok=True)
 
-
+# Общий CSS держим в одном месте, чтобы все evidence-страницы выглядели одинаково в отчете.
 STYLE = """
 <style>
   :root {
@@ -118,19 +118,23 @@ STYLE = """
 
 
 def read_text(name: str) -> str:
+    # Все evidence-файлы лежат рядом с отчетом, поэтому генератор не зависит от live-сервера.
     return (EVIDENCE / name).read_text(encoding="utf-8").strip()
 
 
 def read_json(name: str) -> dict:
+    # JSON-файлы приходят из Prometheus/Loki/API и используются для построения читаемых HTML-блоков.
     return json.loads(read_text(name))
 
 
 def prom_scalar(name: str) -> float:
+    # Prometheus query API возвращает vector; для карточек отчета нужен один числовой value.
     data = read_json(name)
     return float(data["data"]["result"][0]["value"][1])
 
 
 def render_page(title: str, body: str, filename: str) -> None:
+    # Каждая evidence-страница получает timestamp генерации, чтобы на защите было видно актуальность данных.
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     html = f"""<!DOCTYPE html>
 <html lang="ru">
@@ -154,6 +158,7 @@ def render_page(title: str, body: str, filename: str) -> None:
 
 
 def build_backend_page() -> None:
+    # Backend evidence связывает raw JSON endpoint и HTTP-заголовки frontend NodePort.
     api_info = read_text("api-info.json")
     frontend_head = read_text("frontend-head.txt")
     body = f"""
@@ -174,6 +179,7 @@ def build_backend_page() -> None:
 
 
 def build_k8s_page() -> None:
+    # Kubernetes evidence собирается из текстового вывода kubectl/helm, поэтому его легко сверить в терминале.
     raw = read_text("k8s-live.txt")
     parts = [part.strip() for part in raw.split("====")]
     nodes = parts[0] if len(parts) > 0 else raw
@@ -215,6 +221,7 @@ def build_k8s_page() -> None:
 
 
 def build_monitoring_page() -> None:
+    # Monitoring evidence показывает те же типы метрик, что и Grafana dashboard: system + Kubernetes objects.
     up_targets = int(prom_scalar("prometheus-up.json"))
     cpu_used = prom_scalar("prometheus-cpu.json")
     mem_free_pct = prom_scalar("prometheus-memory.json")
@@ -270,6 +277,7 @@ def build_monitoring_page() -> None:
 
 
 def build_loki_page() -> None:
+    # Loki evidence превращает сырые log streams в таблицу api/web/worker для отчета.
     loki = read_json("loki-query.json")
     streams = loki["data"]["result"]
     entries = []
@@ -304,6 +312,7 @@ def build_loki_page() -> None:
 
 
 def main() -> None:
+    # Один запуск пересобирает все HTML-страницы, которые потом рендерятся в PNG-скриншоты.
     build_backend_page()
     build_k8s_page()
     build_monitoring_page()
