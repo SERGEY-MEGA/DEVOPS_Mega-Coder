@@ -538,7 +538,7 @@ Job `deploy_helm`:
 | Grafana | `http://192.168.1.29:30030/login` отвечает `200 OK` |
 | Kubernetes | нода `server` в статусе `Ready`, версия `v1.34.5+k3s1` |
 | Приложение | `api`, `web`, `worker` по `2/2`, `redis` `1/1` |
-| Helm | release `mega` в namespace `mega-coder`, revision `10`, status `deployed` |
+| Helm | release `mega` в namespace `mega-coder`, revision `11`, status `deployed` |
 | Monitoring | releases `monitoring` и `loki` в статусе `deployed`; pod'ы monitoring namespace `Running` |
 | Grafana dashboard | `MEGA CODER / DevOps Overview` импортирован и доступен по `/d/mega-coder-devops/mega-coder-devops-overview` |
 

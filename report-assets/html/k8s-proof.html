@@ -111,7 +111,7 @@
   <main>
     <section class="hero">
       <h1>Kubernetes: live cluster evidence</h1>
-      <p>Живые данные стенда MEGA CODER, зафиксированные 2026-04-13 01:48:09.</p>
+      <p>Живые данные стенда MEGA CODER, зафиксированные 2026-04-13 02:03:32.</p>
     </section>
     
     <section class="panel" style="margin-bottom: 18px;">
@@ -124,14 +124,14 @@ server   Ready    control-plane   18d   v1.34.5+k3s1   192.168.1.29   &lt;none&g
       <div class="panel">
         <h2>Pods</h2>
         <p>Подтверждение, что приложение и monitoring работают одновременно.</p>
-        <pre>NAME                                      READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE   READINESS GATES
-mega-mega-coder-api-777c796c5f-kq74c      1/1     Running   0          30m   10.42.0.73   server   &lt;none&gt;           &lt;none&gt;
-mega-mega-coder-api-777c796c5f-pk27l      1/1     Running   0          30m   10.42.0.77   server   &lt;none&gt;           &lt;none&gt;
-mega-mega-coder-redis-56647786b9-tg6cn    1/1     Running   0          18d   10.42.0.13   server   &lt;none&gt;           &lt;none&gt;
-mega-mega-coder-web-5686b46cfb-lt4q4      1/1     Running   0          30m   10.42.0.75   server   &lt;none&gt;           &lt;none&gt;
-mega-mega-coder-web-5686b46cfb-xg8xx      1/1     Running   0          30m   10.42.0.72   server   &lt;none&gt;           &lt;none&gt;
-mega-mega-coder-worker-7fdc57cdf4-7lv7g   1/1     Running   0          30m   10.42.0.76   server   &lt;none&gt;           &lt;none&gt;
-mega-mega-coder-worker-7fdc57cdf4-vtj98   1/1     Running   0          30m   10.42.0.74   server   &lt;none&gt;           &lt;none&gt;</pre>
+        <pre>NAME                                      READY   STATUS    RESTARTS   AGE     IP           NODE     NOMINATED NODE   READINESS GATES
+mega-mega-coder-api-78866b6f4d-pnfj2      1/1     Running   0          9m42s   10.42.0.83   server   &lt;none&gt;           &lt;none&gt;
+mega-mega-coder-api-78866b6f4d-slrrb      1/1     Running   0          9m56s   10.42.0.78   server   &lt;none&gt;           &lt;none&gt;
+mega-mega-coder-redis-56647786b9-tg6cn    1/1     Running   0          18d     10.42.0.13   server   &lt;none&gt;           &lt;none&gt;
+mega-mega-coder-web-7f7b649ddc-7nn85      1/1     Running   0          9m56s   10.42.0.80   server   &lt;none&gt;           &lt;none&gt;
+mega-mega-coder-web-7f7b649ddc-tcvjl      1/1     Running   0          9m43s   10.42.0.82   server   &lt;none&gt;           &lt;none&gt;
+mega-mega-coder-worker-7db4f67ddf-69b5c   1/1     Running   0          9m56s   10.42.0.79   server   &lt;none&gt;           &lt;none&gt;
+mega-mega-coder-worker-7db4f67ddf-cxm8v   1/1     Running   0          9m51s   10.42.0.81   server   &lt;none&gt;           &lt;none&gt;</pre>
       </div>
       <div class="panel">
         <h2>Deployments / Services / ConfigMap / Secret</h2>
@@ -161,7 +161,7 @@ mega-mega-coder-secret   Opaque                           1      18d</pre>
       <p>Приложение, Loki и kube-prometheus-stack установлены через Helm.</p>
       <pre>NAME      	NAMESPACE 	REVISION	UPDATED                                	STATUS  	CHART                        	APP VERSION
 loki      	monitoring	1       	2026-03-25 23:34:46.706831117 +0300 MSK	deployed	loki-stack-2.10.3            	v2.9.3     
-mega      	mega-coder	10      	2026-04-12 22:11:08.908158655 +0000 UTC	deployed	mega-coder-0.1.0             	1.0.0      
+mega      	mega-coder	11      	2026-04-12 22:53:34.979225377 +0000 UTC	deployed	mega-coder-0.1.0             	1.0.0      
 monitoring	monitoring	1       	2026-03-25 23:31:57.395060055 +0300 MSK	deployed	kube-prometheus-stack-82.14.1	v0.89.0</pre>
     </section>
     <section class="panel" style="margin-top: 18px;">

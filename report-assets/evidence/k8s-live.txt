@@ -1,14 +1,14 @@
 NAME     STATUS   ROLES           AGE   VERSION        INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
 server   Ready    control-plane   18d   v1.34.5+k3s1   192.168.1.29   <none>        Ubuntu 24.04.4 LTS   6.17.0-19-generic   containerd://2.1.5-k3s1
 ====
-NAME                                      READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE   READINESS GATES
-mega-mega-coder-api-777c796c5f-kq74c      1/1     Running   0          30m   10.42.0.73   server   <none>           <none>
-mega-mega-coder-api-777c796c5f-pk27l      1/1     Running   0          30m   10.42.0.77   server   <none>           <none>
-mega-mega-coder-redis-56647786b9-tg6cn    1/1     Running   0          18d   10.42.0.13   server   <none>           <none>
-mega-mega-coder-web-5686b46cfb-lt4q4      1/1     Running   0          30m   10.42.0.75   server   <none>           <none>
-mega-mega-coder-web-5686b46cfb-xg8xx      1/1     Running   0          30m   10.42.0.72   server   <none>           <none>
-mega-mega-coder-worker-7fdc57cdf4-7lv7g   1/1     Running   0          30m   10.42.0.76   server   <none>           <none>
-mega-mega-coder-worker-7fdc57cdf4-vtj98   1/1     Running   0          30m   10.42.0.74   server   <none>           <none>
+NAME                                      READY   STATUS    RESTARTS   AGE     IP           NODE     NOMINATED NODE   READINESS GATES
+mega-mega-coder-api-78866b6f4d-pnfj2      1/1     Running   0          9m42s   10.42.0.83   server   <none>           <none>
+mega-mega-coder-api-78866b6f4d-slrrb      1/1     Running   0          9m56s   10.42.0.78   server   <none>           <none>
+mega-mega-coder-redis-56647786b9-tg6cn    1/1     Running   0          18d     10.42.0.13   server   <none>           <none>
+mega-mega-coder-web-7f7b649ddc-7nn85      1/1     Running   0          9m56s   10.42.0.80   server   <none>           <none>
+mega-mega-coder-web-7f7b649ddc-tcvjl      1/1     Running   0          9m43s   10.42.0.82   server   <none>           <none>
+mega-mega-coder-worker-7db4f67ddf-69b5c   1/1     Running   0          9m56s   10.42.0.79   server   <none>           <none>
+mega-mega-coder-worker-7db4f67ddf-cxm8v   1/1     Running   0          9m51s   10.42.0.81   server   <none>           <none>
 ====
 NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/mega-mega-coder-api      2/2     2            2           18d
@@ -31,7 +31,7 @@ mega-mega-coder-secret   Opaque                           1      18d
 ====
 NAME      	NAMESPACE 	REVISION	UPDATED                                	STATUS  	CHART                        	APP VERSION
 loki      	monitoring	1       	2026-03-25 23:34:46.706831117 +0300 MSK	deployed	loki-stack-2.10.3            	v2.9.3     
-mega      	mega-coder	10      	2026-04-12 22:11:08.908158655 +0000 UTC	deployed	mega-coder-0.1.0             	1.0.0      
+mega      	mega-coder	11      	2026-04-12 22:53:34.979225377 +0000 UTC	deployed	mega-coder-0.1.0             	1.0.0      
 monitoring	monitoring	1       	2026-03-25 23:31:57.395060055 +0300 MSK	deployed	kube-prometheus-stack-82.14.1	v0.89.0    
 ====
 NAME                                                   READY   STATUS    RESTARTS   AGE   IP             NODE     NOMINATED NODE   READINESS GATES
