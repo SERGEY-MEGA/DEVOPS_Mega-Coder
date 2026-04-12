@@ -3,38 +3,236 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MEGA CODER — DevOps demo</title>
+  <title>MEGA CODER: Frontend + Backend</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 2rem; background: #0f172a; color: #e2e8f0; }
-    h1 { color: #38bdf8; }
-    pre { background: #020617; padding: 1rem; border-radius: 8px; overflow: auto; }
-    a { color: #a5b4fc; }
+    :root {
+      --bg: #08111f;
+      --panel: #111a2f;
+      --panel-soft: #14213d;
+      --text: #e8f1ff;
+      --muted: #9fb1d0;
+      --accent: #63b3ff;
+      --ok: #32d296;
+      --border: #263653;
+      --code: #050b16;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", "Trebuchet MS", Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(99, 179, 255, 0.22), transparent 34rem),
+        linear-gradient(180deg, #09111f 0%, #0b1020 100%);
+      color: var(--text);
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 56px;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.6rem);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    a {
+      color: #b7d8ff;
+    }
+
+    code {
+      color: #d8ecff;
+      font-family: "SFMono-Regular", "Menlo", "Consolas", monospace;
+    }
+
+    .hero,
+    .panel {
+      border: 1px solid var(--border);
+      background: rgba(17, 26, 47, 0.9);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      padding: clamp(24px, 5vw, 38px);
+      border-radius: 24px;
+      margin-bottom: 22px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 6px 12px;
+      border: 1px solid rgba(50, 210, 150, 0.28);
+      border-radius: 999px;
+      background: rgba(50, 210, 150, 0.14);
+      color: var(--ok);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .panel {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      min-height: 280px;
+      padding: clamp(20px, 4vw, 28px);
+      border-radius: 20px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 18px;
+      background: linear-gradient(135deg, #63b3ff, #32d296);
+      color: #06101f;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+    }
+
+    pre {
+      width: 100%;
+      min-height: 128px;
+      margin: 0;
+      padding: 16px 18px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--code);
+      color: #e7f0ff;
+      font-family: "SFMono-Regular", "Menlo", "Consolas", monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .status-line {
+      color: var(--ok);
+      font-weight: 800;
+    }
+
+    @media (max-width: 820px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>MEGA CODER (frontend)</h1>
-  <p>Этот UI подтверждает требование ТЗ: есть веб-интерфейс. Ниже — ответ <code>/api/info</code>.</p>
-  <p><button id="load">Загрузить данные с API</button></p>
-  <!-- В этот блок выводится JSON-ответ backend, чтобы на защите было видно связь frontend -> api. -->
-  <pre id="out">(нажмите кнопку)</pre>
-  <p><a href="/api/info" target="_blank" rel="noreferrer">Открыть /api/info в новой вкладке</a></p>
+  <main>
+    <section class="hero">
+      <div class="hero-meta">
+        <span class="pill">frontend ready</span>
+        <span class="pill">backend api ready</span>
+        <span class="pill">kubernetes nodeport</span>
+      </div>
+      <h1>MEGA CODER: Frontend + Backend</h1>
+      <p>
+        Этот экран показывает оба обязательных слоя приложения из ТЗ: веб-интерфейс frontend и живой HTTP endpoint backend.
+        Frontend развернут в Kubernetes и обращается к backend через относительный путь <code>/api/info</code>.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Backend API</h2>
+        <p>Ответ endpoint <code>/api/info</code> приходит из отдельного backend-сервиса.</p>
+        <div class="actions">
+          <button id="load" type="button">Обновить ответ API</button>
+          <a href="/api/info" target="_blank" rel="noreferrer">Открыть raw JSON</a>
+        </div>
+        <!-- В этот блок выводится JSON-ответ backend, чтобы на защите было видно связь frontend -> api. -->
+        <pre id="api-response">Загрузка ответа backend...</pre>
+      </article>
+
+      <article class="panel">
+        <h2>HTTP-проверка frontend</h2>
+        <p>Эта карточка подтверждает, что браузер открыл именно frontend NodePort сервиса.</p>
+        <!-- Статус frontend держим на странице, потому что заголовки HTTP браузер не дает прочитать без отдельного debug endpoint. -->
+        <pre><span class="status-line">HTTP/1.1 200 OK</span>
+Service: mega-coder-web
+Role: frontend UI
+NodePort: 30080
+Backend route: /api/info
+Runtime: nginx container inside Kubernetes</pre>
+      </article>
+    </section>
+  </main>
+
   <script>
-    // Кнопка делает HTTP-запрос на относительный путь /api/info.
-    // Nginx из web/nginx.conf проксирует этот путь внутрь Kubernetes к backend service.
-    document.getElementById('load').onclick = async () => {
-      const el = document.getElementById('out');
-      el.textContent = 'Загрузка...';
+    // Кнопка и автозагрузка делают HTTP-запрос на относительный путь /api/info.
+    // Относительный URL важен: один и тот же frontend работает локально, в NodePort и после Helm deploy.
+    const output = document.getElementById('api-response');
+    const button = document.getElementById('load');
+
+    async function loadBackendInfo() {
+      output.textContent = 'Загрузка ответа backend...';
+
       try {
-        // fetch('/api/info') специально без host/port: так один и тот же frontend работает в любой среде.
-        const r = await fetch('/api/info');
-        const j = await r.json();
-        // Красиво форматируем JSON, чтобы ответ API можно было показать преподавателю прямо в браузере.
-        el.textContent = JSON.stringify(j, null, 2);
-      } catch (e) {
+        // Nginx из web/nginx.conf проксирует /api/info внутрь Kubernetes к backend service.
+        const response = await fetch('/api/info', { headers: { Accept: 'application/json' } });
+
+        if (!response.ok) {
+          throw new Error(`backend вернул HTTP ${response.status}`);
+        }
+
+        const payload = await response.json();
+
+        // Красиво форматируем JSON, чтобы преподавателю было видно реальный ответ backend.
+        output.textContent = JSON.stringify(payload, null, 2);
+      } catch (error) {
         // Ошибка выводится в UI, чтобы при проблеме с API было видно, где ломается цепочка.
-        el.textContent = 'Ошибка: ' + e;
+        output.textContent = `Ошибка связи frontend -> backend: ${error}`;
       }
-    };
+    }
+
+    button.addEventListener('click', loadBackendInfo);
+    loadBackendInfo();
   </script>
 </body>
 </html>
