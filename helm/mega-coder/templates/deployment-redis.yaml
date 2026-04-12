@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/component: redis
     app.kubernetes.io/name: {{ include "mega-coder.name" . }}
 spec:
+  # Redis в учебном стенде один: это вспомогательный сервис, не основная бизнес-логика приложения.
   replicas: {{ .Values.replicaCount.redis }}
   selector:
     matchLabels:
@@ -20,16 +21,19 @@ spec:
     spec:
       containers:
         - name: redis
+          # Redis используется backend-ом через REDIS_URL и показывает наличие инфраструктурного сервиса.
           image: {{ include "mega-coder.image" (dict "root" . "image" .Values.images.redis) }}
           imagePullPolicy: {{ .Values.images.redis.pullPolicy }}
           ports:
             - name: redis
               containerPort: 6379
+          # readinessProbe говорит Kubernetes, когда Redis уже готов принимать подключения.
           readinessProbe:
             exec:
               command: ["redis-cli", "ping"]
             initialDelaySeconds: 5
             periodSeconds: 10
+          # livenessProbe перезапустит контейнер, если Redis перестанет отвечать на ping.
           livenessProbe:
             exec:
               command: ["redis-cli", "ping"]

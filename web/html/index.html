@@ -15,17 +15,23 @@
   <h1>MEGA CODER (frontend)</h1>
   <p>Этот UI подтверждает требование ТЗ: есть веб-интерфейс. Ниже — ответ <code>/api/info</code>.</p>
   <p><button id="load">Загрузить данные с API</button></p>
+  <!-- В этот блок выводится JSON-ответ backend, чтобы на защите было видно связь frontend -> api. -->
   <pre id="out">(нажмите кнопку)</pre>
   <p><a href="/api/info" target="_blank" rel="noreferrer">Открыть /api/info в новой вкладке</a></p>
   <script>
+    // Кнопка делает HTTP-запрос на относительный путь /api/info.
+    // Nginx из web/nginx.conf проксирует этот путь внутрь Kubernetes к backend service.
     document.getElementById('load').onclick = async () => {
       const el = document.getElementById('out');
       el.textContent = 'Загрузка...';
       try {
+        // fetch('/api/info') специально без host/port: так один и тот же frontend работает в любой среде.
         const r = await fetch('/api/info');
         const j = await r.json();
+        // Красиво форматируем JSON, чтобы ответ API можно было показать преподавателю прямо в браузере.
         el.textContent = JSON.stringify(j, null, 2);
       } catch (e) {
+        // Ошибка выводится в UI, чтобы при проблеме с API было видно, где ломается цепочка.
         el.textContent = 'Ошибка: ' + e;
       }
     };

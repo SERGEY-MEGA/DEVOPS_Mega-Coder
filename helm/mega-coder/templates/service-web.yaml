@@ -7,14 +7,19 @@ metadata:
     app.kubernetes.io/component: web
     app.kubernetes.io/name: {{ include "mega-coder.name" . }}
 spec:
+  # Для обычного кластера можно оставить ClusterIP, а для live-demo включён NodePort из values.yaml.
   type: {{ .Values.service.webType | default .Values.service.type }}
+  # Selector связывает Service только с pod'ами frontend Deployment.
   selector:
     app.kubernetes.io/component: web
     app.kubernetes.io/name: {{ include "mega-coder.name" . }}
   ports:
     - name: http
+      # Внутрикластерный порт сервиса, на который можно обращаться из других pod'ов.
       port: {{ .Values.service.webPort }}
+      # targetPort по имени ведёт на containerPort: http в deployment-web.yaml.
       targetPort: http
       {{- if eq (.Values.service.webType | default .Values.service.type) "NodePort" }}
+      # Фиксированный NodePort нужен, чтобы на защите всегда открывать один и тот же URL :30080.
       nodePort: {{ .Values.service.webNodePort }}
       {{- end }}
