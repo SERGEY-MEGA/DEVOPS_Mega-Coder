@@ -9,6 +9,7 @@
 
 - **[REPORT.md](./REPORT.md)** — полный отчёт по проекту.
 - **[REPORT_ALERTING.md](./REPORT_ALERTING.md)** — отдельный отчёт по Prometheus/Alertmanager/Grafana → Telegram alerting.
+- **[TELEGRAM_ALERTING_FULL_REPORT.md](./TELEGRAM_ALERTING_FULL_REPORT.md)** — полный отчёт под ТЗ: бот, Alertmanager, Grafana, GitLab, reporter, скриншоты и evidence.
 - **[docs/alerting/REPORT_ALERTING.pdf](./docs/alerting/REPORT_ALERTING.pdf)** — PDF-версия alerting-отчёта для сдачи.
 - **[BOT_SETUP.md](./BOT_SETUP.md)** — как безопасно создать Telegram bot secret и не коммитить токены.
 - **[DEMO_ALERTS.md](./DEMO_ALERTS.md)** — как показать firing/resolved alert, GitLab event и reporter.
