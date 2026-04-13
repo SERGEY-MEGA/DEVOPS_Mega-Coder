@@ -1,5 +1,7 @@
 # Полный отчёт: Telegram-бот для алертов и отчётов (MEGA CODER)
 
+**Указатель всех материалов по Telegram** (gitlub.ru + GitHub): [TELEGRAM_ALERTING_FULL_REPORT.md](../../TELEGRAM_ALERTING_FULL_REPORT.md)
+
 **Проект:** MEGA CODER — курсовой DevOps-стенд  
 **Основной Git:** **self-hosted GitLab** на **[gitlub.ru](https://gitlub.ru)** (это **не** gitlab.com) — проект [`MEGA/deveps-mega-coder`](https://gitlub.ru/MEGA/deveps-mega-coder).  
 **Зеркало:** [GitHub `SERGEY-MEGA/DEVOPS_Mega-Coder`](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/tree/main)  

@@ -1,5 +1,7 @@
 # Alert Manager → Telegram: настройка и живые скриншоты
 
+**Все отчёты по Telegram** (полный указатель, ссылки **gitlub.ru** и **GitHub**): [../TELEGRAM_ALERTING_FULL_REPORT.md](../TELEGRAM_ALERTING_FULL_REPORT.md)
+
 Папка в **корне репозитория** — чтобы преподавателю было сразу видно: как подключён бот, что приходит в Telegram, и **реальные кадры** с чата (не заглушки).
 
 **Связанные материалы:** [BOT_SETUP.md](../BOT_SETUP.md) · [DEMO_ALERTS.md](../DEMO_ALERTS.md) · [docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md](../docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md) · код моста: [`services/alert-bot/`](../services/alert-bot/)

@@ -5,6 +5,8 @@
 
 Репозиторий закрывает требования курса: **три сервиса** (API, Web, Worker), **Redis**, **Docker** (multi-stage, non-root, `.dockerignore`), **Helm**, **GitLab CI/CD**, **Terraform** (Yandex Cloud), **Ansible** (харднинг), **мониторинг** (Prometheus, Grafana, Loki, Promtail, Node Exporter, kube-state-metrics).
 
+**Все отчёты по Telegram (указатель + ссылки gitlub.ru и GitHub):** **[TELEGRAM_ALERTING_FULL_REPORT.md](./TELEGRAM_ALERTING_FULL_REPORT.md)**
+
 **Alertmanager → Telegram (папка в корне):** **[alert-manager/README.md](./alert-manager/README.md)** — как настроил бота, подключил Alertmanager и GitLab (**gitlub.ru**), **живые скриншоты** чата.
 
 Основные документы:
