@@ -4,15 +4,17 @@
 **Основной Git:** **self-hosted GitLab** на **[gitlub.ru](https://gitlub.ru)** (это **не** gitlab.com) — проект [`MEGA/deveps-mega-coder`](https://gitlub.ru/MEGA/deveps-mega-coder).  
 **Зеркало:** [GitHub `SERGEY-MEGA/DEVOPS_Mega-Coder`](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/tree/main)  
 **Расположение файла:** `docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md`  
+**Живые кадры из Telegram (как на защите):** корневая папка **[`alert-manager/`](../../alert-manager/README.md)** — там же пошаговое описание подключения бота.  
 **Дата отчёта:** 2026-04-14  
 
 ---
 
 ## Где открыть этот файл со скриншотами
 
-- В репозитории: **`docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md`** (эта папка `alert-manager`).
-- На **[gitlub.ru](https://gitlub.ru/MEGA/deveps-mega-coder)** или на **GitHub**: после **push** откройте файл в браузере — картинки подтягиваются из `docs/screenshots/*.png`.  
-  Команды: `git add docs/alert-manager/ docs/screenshots/ && git commit && git push` в [**gitlub.ru**](https://gitlub.ru/MEGA/deveps-mega-coder) и в [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/tree/main).
+- **Сначала смотри:** [`alert-manager/README.md`](../../alert-manager/README.md) в **корне** репозитория — реальные скриншоты чата и настройка.
+- Этот файл: **`docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md`** — архитектура, ТЗ, скриншоты Grafana/Alertmanager из `docs/screenshots/`.
+- На **[gitlub.ru](https://gitlub.ru/MEGA/deveps-mega-coder)** или **GitHub**: после **push** откройте файл в браузере.  
+  Команды: `git add alert-manager/ docs/alert-manager/ docs/screenshots/ && git commit && git push` в [**gitlub.ru**](https://gitlub.ru/MEGA/deveps-mega-coder) и [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/tree/main).
 
 **Оглавление:** [безопасность](#0-безопасность-токена) · [как создал бота](#1-как-создавался-telegram-бот-пошагово) · [что умеет](#2-что-умеет-бот-и-связанные-сервисы) · [архитектура](#3-архитектура) · [хронология проекта](#4-хронология-внедрения-в-коде) · [Helm и секреты](#5-подключение-к-kubernetes-и-helm) · [код alert-bot](#6-сервис-alert-bot) · [Prometheus / Alertmanager](#7-prometheus-и-alertmanager) · [reporter](#8-reporter) · [проверки](#9-проверка-работы) · **[фото и скриншоты](#10-скриншоты-иллюстрации)** · [ТЗ](#11-соответствие-тз) · [ссылки](#12-связанные-документы)
 
@@ -189,7 +191,17 @@ receivers:
 
 ## 10. Скриншоты (иллюстрации)
 
-Файлы лежат в **`docs/screenshots/`** в репозитории. Ниже каждый снимок вынесен **отдельным блоком** — так и **gitlub.ru**, и GitHub корректно показывают картинки в Markdown (в таблицах изображения часто ломаются).
+### 10.0 Реальный чат Telegram (корень репозитория: `alert-manager/`)
+
+Те же кадры собраны в **[`alert-manager/README.md`](../../alert-manager/README.md)** с описанием настройки. Дубли ниже — чтобы всё было в одном отчёте.
+
+![FIRING EN/RU, PodCrashLooping](../../alert-manager/telegram-01-firing-en-and-ru.png)
+
+![ВОССТАНОВЛЕНО, GitLab pipeline, краткий отчёт](../../alert-manager/telegram-02-resolved-gitlab-report.png)
+
+![Полный тред: resolved, GitLab, отчёт, группа Alertmanager](../../alert-manager/telegram-03-chat-full-thread.png)
+
+Дальше — скриншоты из **`docs/screenshots/`** (Grafana, Alertmanager UI, k8s и т.д.).
 
 ### 10.1 Grafana — правила алертов (PrometheusRule в UI)
 

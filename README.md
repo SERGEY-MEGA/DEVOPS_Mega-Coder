@@ -5,11 +5,14 @@
 
 Репозиторий закрывает требования курса: **три сервиса** (API, Web, Worker), **Redis**, **Docker** (multi-stage, non-root, `.dockerignore`), **Helm**, **GitLab CI/CD**, **Terraform** (Yandex Cloud), **Ansible** (харднинг), **мониторинг** (Prometheus, Grafana, Loki, Promtail, Node Exporter, kube-state-metrics).
 
+**Alertmanager → Telegram (папка в корне):** **[alert-manager/README.md](./alert-manager/README.md)** — как настроил бота, подключил Alertmanager и GitLab (**gitlub.ru**), **живые скриншоты** чата.
+
 Основные документы:
 
 - **[REPORT.md](./REPORT.md)** — полный отчёт по проекту.
 - **[REPORT_ALERTING.md](./REPORT_ALERTING.md)** — отдельный отчёт по Prometheus/Alertmanager/Grafana → Telegram alerting.
-- **[docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md](./docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md)** — полный отчёт под ТЗ: бот, Alertmanager, Grafana, GitLab (gitlub.ru), reporter, скриншоты и evidence.
+- **[alert-manager/README.md](./alert-manager/README.md)** — настройка бота + **реальные скриншоты Telegram** (firing/resolved, GitLab, отчёт).  
+- **[docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md](./docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md)** — развёрнутый отчёт под ТЗ (архитектура, ТЗ, дубли скриншотов из `docs/screenshots/`).
 - **[docs/alerting/REPORT_ALERTING.pdf](./docs/alerting/REPORT_ALERTING.pdf)** — PDF-версия alerting-отчёта для сдачи.
 - **[BOT_SETUP.md](./BOT_SETUP.md)** — как безопасно создать Telegram bot secret и не коммитить токены.
 - **[DEMO_ALERTS.md](./DEMO_ALERTS.md)** — как показать firing/resolved alert, GitLab event и reporter.

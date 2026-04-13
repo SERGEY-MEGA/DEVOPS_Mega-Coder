@@ -1,5 +1,5 @@
-# Alert Manager — отчёты и материалы
+# Alert Manager — отчёты и материалы (внутри `docs/`)
 
-- **[TELEGRAM_ALERTING_FULL_REPORT.md](./TELEGRAM_ALERTING_FULL_REPORT.md)** — полный отчёт: Telegram-бот, Alertmanager, Prometheus/Grafana, GitLab (gitlub.ru), reporter, скриншоты.
+- **[TELEGRAM_ALERTING_FULL_REPORT.md](./TELEGRAM_ALERTING_FULL_REPORT.md)** — развёрнутый отчёт: архитектура, ТЗ, Grafana/Alertmanager UI из [`../screenshots/`](../screenshots/).
 
-Скриншоты лежат в [`../screenshots/`](../screenshots/).
+**Живые скриншоты чата Telegram** (firing/resolved, GitLab **gitlub.ru**, отчёт reporter) — в **корневой** папке репозитория: **[../../alert-manager/README.md](../../alert-manager/README.md)**.

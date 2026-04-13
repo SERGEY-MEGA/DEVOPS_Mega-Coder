@@ -22,6 +22,8 @@
 | `BOT_SETUP.md` | Инструкция создания Telegram bot secret без коммита токенов. |
 | `DEMO_ALERTS.md` | Сценарии firing/resolved/GitLab/report demo. |
 | `RUNBOOKS.md` | Runbook’и по alert rules. |
+| `alert-manager/` | **Скриншоты реального чата Telegram** (Alertmanager firing/resolved, GitLab, отчёт) + пошаговое описание настройки бота и webhooks. Вход: `alert-manager/README.md`. |
+| `TELEGRAM_ALERTING_FULL_REPORT.md` | Указатель: корневая `alert-manager/` и `docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md`. |
 
 ## 2. Приложение
 

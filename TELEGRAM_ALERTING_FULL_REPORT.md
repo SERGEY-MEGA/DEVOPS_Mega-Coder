@@ -1,7 +1,5 @@
-# Полный отчёт по Alertmanager / Telegram перенесён
+# Отчёты Alertmanager / Telegram
 
-Актуальная версия с скриншотами и оглавлением:
+1. **Живые скриншоты чата + как настроил бота:** **[alert-manager/README.md](alert-manager/README.md)** (папка **`alert-manager/`** в корне репозитория).
 
-**[docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md](docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md)**
-
-Краткий указатель папки: [docs/alert-manager/README.md](docs/alert-manager/README.md).
+2. **Развёрнутый отчёт (ТЗ, архитектура):** **[docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md](docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md)**

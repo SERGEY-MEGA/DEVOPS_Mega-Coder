@@ -11,7 +11,9 @@
 - `docs/screenshots/report-in-telegram.png` — screenshot evidence reporter/live summary.
 - `docs/screenshots/k8s-pods-status.png` — screenshot evidence с live `kubectl get nodes/pods/deploy/svc`.
 
-Осталось снять вручную из Telegram UI, чтобы это были именно настоящие скрины чата:
+**Актуальные скрины чата** (firing EN/RU, resolved, GitLab **gitlub.ru**, отчёт reporter) лежат в **корневой** папке [`alert-manager/`](../../alert-manager/README.md) — см. `telegram-01-*.png` … `telegram-03-*.png`.
 
-- `docs/screenshots/telegram-firing-alert.png` — Telegram-сообщение с `Alertmanager: СРАБАТЫВАЕТ`.
-- `docs/screenshots/telegram-resolved-alert.png` — Telegram-сообщение с `Alertmanager: ВОССТАНОВЛЕНО`.
+По желанию дубли в `docs/screenshots/`:
+
+- `telegram-firing-alert.png` — только `Alertmanager: СРАБАТЫВАЕТ`.
+- `telegram-resolved-alert.png` — только `ВОССТАНОВЛЕНО`.
