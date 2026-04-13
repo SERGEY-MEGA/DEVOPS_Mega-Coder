@@ -1,7 +1,7 @@
 # MEGA CODER — курсовой стенд DevOps
 
 **Автор:** Сергей  
-**Репозиторий:** `http://192.168.1.29:8080/MEGA/deveps-mega-coder`
+**Репозиторий (self-hosted GitLab на gitlub.ru, не gitlab.com):** [`https://gitlub.ru/MEGA/deveps-mega-coder`](https://gitlub.ru/MEGA/deveps-mega-coder) · в LAN: `http://192.168.1.29:8080/MEGA/deveps-mega-coder`
 
 Репозиторий закрывает требования курса: **три сервиса** (API, Web, Worker), **Redis**, **Docker** (multi-stage, non-root, `.dockerignore`), **Helm**, **GitLab CI/CD**, **Terraform** (Yandex Cloud), **Ansible** (харднинг), **мониторинг** (Prometheus, Grafana, Loki, Promtail, Node Exporter, kube-state-metrics).
 
@@ -9,7 +9,7 @@
 
 - **[REPORT.md](./REPORT.md)** — полный отчёт по проекту.
 - **[REPORT_ALERTING.md](./REPORT_ALERTING.md)** — отдельный отчёт по Prometheus/Alertmanager/Grafana → Telegram alerting.
-- **[TELEGRAM_ALERTING_FULL_REPORT.md](./TELEGRAM_ALERTING_FULL_REPORT.md)** — полный отчёт под ТЗ: бот, Alertmanager, Grafana, GitLab, reporter, скриншоты и evidence.
+- **[docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md](./docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md)** — полный отчёт под ТЗ: бот, Alertmanager, Grafana, GitLab (gitlub.ru), reporter, скриншоты и evidence.
 - **[docs/alerting/REPORT_ALERTING.pdf](./docs/alerting/REPORT_ALERTING.pdf)** — PDF-версия alerting-отчёта для сдачи.
 - **[BOT_SETUP.md](./BOT_SETUP.md)** — как безопасно создать Telegram bot secret и не коммитить токены.
 - **[DEMO_ALERTS.md](./DEMO_ALERTS.md)** — как показать firing/resolved alert, GitLab event и reporter.

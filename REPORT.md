@@ -1,8 +1,8 @@
 # Отчёт по курсу DevOps — проект «MEGA CODER»
 
 **Выполнил:** Сергей  
-**GitHub:** `https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder`  
-**Self-hosted GitLab:** `http://192.168.1.29:8080/MEGA/deveps-mega-coder`
+**GitHub (зеркало):** `https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder`  
+**Self-hosted GitLab (домен gitlub.ru, не gitlab.com):** `https://gitlub.ru/MEGA/deveps-mega-coder` · в LAN: `http://192.168.1.29:8080/MEGA/deveps-mega-coder`
 
 ---
 
@@ -180,7 +180,8 @@ docker build -t mega-web:local ./web
 Пример ручного деплоя:
 
 ```bash
-export REG=registry.gitlab.com/<group>/<project>
+# Для стенда на gitlub.ru / локальный registry (не gitlab.com):
+export REG=192.168.1.29:5050/MEGA/deveps-mega-coder
 export TAG=dev-local
 
 helm upgrade --install mega ./helm/mega-coder -n mega-coder --create-namespace \

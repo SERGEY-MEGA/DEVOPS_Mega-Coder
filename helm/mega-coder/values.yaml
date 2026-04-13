@@ -1,6 +1,6 @@
 # Параметры чарта — всё, что меняется при деплое, выносим сюда (требование ТЗ).
 global:
-  # Полный путь registry без завершающего слэша, например registry.gitlab.com/group/project
+  # Полный путь registry без завершающего слэша (стенд: GitLab Container Registry 192.168.1.29:5050; Git — gitlub.ru, не gitlab.com)
   imageRegistry: ""
 
 nameOverride: ""
