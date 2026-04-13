@@ -1,0 +1,39 @@
+NAME	NAMESPACE 	REVISION	UPDATED                                	STATUS  	CHART           	APP VERSION
+mega	mega-coder	15      	2026-04-13 23:08:16.969498472 +0300 MSK	deployed	mega-coder-0.1.0	1.0.0
+
+USER-SUPPLIED VALUES:
+alerting:
+  alertBot:
+    hostNetwork: true
+  appEnv: dev
+  clusterName: k3s-home
+  enabled: true
+  prometheusRule:
+    enabled: true
+  reporter:
+    enabled: true
+    schedule: 0 */6 * * *
+    sendReportToTelegram: false
+  secrets:
+    existingSecret: mega-coder-alerting-secret
+global:
+  imageRegistry: 192.168.1.29:5050/mega/deveps-mega-coder
+imagePullSecrets:
+- name: gitlab-registry
+images:
+  alertBot:
+    imageRegistry: docker.io/library
+    repository: mega-coder-alert-bot
+    tag: alerting-demo
+  api:
+    tag: 941e819e-20
+  reporter:
+    imageRegistry: docker.io/library
+    repository: mega-coder-reporter
+    tag: alerting-demo
+  web:
+    tag: 941e819e-20
+  worker:
+    tag: 941e819e-20
+secrets:
+  appSharedSecret: <masked-live-secret>

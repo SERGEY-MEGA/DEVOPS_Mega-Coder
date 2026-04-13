@@ -1,0 +1,20 @@
+{{- if .Values.alerting.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-alert-bot
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: alert-bot
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+spec:
+  # Alertmanager/GitLab hooks идут внутри кластера, поэтому наружный NodePort не нужен.
+  type: {{ .Values.alerting.alertBot.service.type }}
+  selector:
+    app.kubernetes.io/component: alert-bot
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+  ports:
+    - name: http
+      port: {{ .Values.service.alertBotPort }}
+      targetPort: http
+{{- end }}

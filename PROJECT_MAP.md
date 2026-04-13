@@ -17,6 +17,11 @@
 | `PITCH_5MIN.md` | Готовый текст короткого выступления. |
 | `TZ_CHECKLIST.md` | Сверка проекта с каждым пунктом ТЗ. |
 | `DEVOPS_THEORY.md` | Теоретическая шпаргалка по DevOps, GitLab, YAML, CI/CD, Docker, Kubernetes, Helm, Terraform, Ansible и monitoring. |
+| `REPORT_ALERTING.md` | Отдельный отчёт по alerting, Telegram notifications, GitLab webhooks и reporter. |
+| `docs/alerting/REPORT_ALERTING.pdf` | PDF-версия alerting-отчёта для сдачи. |
+| `BOT_SETUP.md` | Инструкция создания Telegram bot secret без коммита токенов. |
+| `DEMO_ALERTS.md` | Сценарии firing/resolved/GitLab/report demo. |
+| `RUNBOOKS.md` | Runbook’и по alert rules. |
 
 ## 2. Приложение
 
@@ -77,6 +82,10 @@ Frontend + reverse proxy.
 | `helm/mega-coder/templates/service-worker.yaml` | Service для worker. |
 | `helm/mega-coder/templates/service-redis.yaml` | Service для Redis. |
 | `helm/mega-coder/templates/ingress.yaml` | Опциональный Ingress. |
+| `helm/mega-coder/templates/deployment-alert-bot.yaml` | Опциональный webhook receiver Alertmanager/Grafana/GitLab → Telegram. |
+| `helm/mega-coder/templates/service-alert-bot.yaml` | ClusterIP Service для alert-bot. |
+| `helm/mega-coder/templates/cronjob-reporter.yaml` | Опциональный CronJob reporter + RBAC для отчётов. |
+| `helm/mega-coder/templates/prometheusrule-alerts.yaml` | Опциональные PrometheusRule alerts, включаются через `alerting.enabled=true`. |
 
 Что показывать на защите:
 - `values.yaml`
@@ -96,6 +105,7 @@ Frontend + reverse proxy.
 | `prepare_image_tag` | Формирует `IMAGE_TAG` и `REGISTRY_BASE`, отдаёт их как dotenv-артефакт. |
 | `.kaniko_build` | Общий шаблон job для сборки образов без privileged runner. |
 | `build_api`, `build_web`, `build_worker` | Сборка и push трёх образов в GitLab Container Registry. |
+| `build_alert_bot`, `build_reporter` | Opt-in сборка alerting образов при `ENABLE_ALERTING_BUILDS=true`; обычный pipeline не утяжеляется. |
 | `deploy_helm` | Деплой Helm-чарта в Kubernetes. Использует `helm upgrade --install --atomic`. |
 
 Что показывать на защите:
@@ -159,6 +169,21 @@ Frontend + reverse proxy.
 | `monitoring/values-kube-prometheus.yaml` | Значения для kube-prometheus-stack: Prometheus, Grafana, Node Exporter, kube-state-metrics. |
 | `monitoring/grafana-dashboard-mega-coder.json` | Готовый Grafana dashboard для защиты: system metrics, Kubernetes replicas и Loki logs. |
 | `monitoring/values-loki-stack.yaml` | Значения для Loki + Promtail. |
+| `monitoring/alertmanager/alertmanager.yml` | Пример Alertmanager route/receiver до alert-bot. |
+| `monitoring/prometheus/rules/mega-coder-alerts.yaml` | Standalone PrometheusRule manifest с alert rules. |
+| `monitoring/loki/rules/mega-coder-loki-rules.yaml` | Пример Loki ruler rule `LokiErrorSpike`; не применяется автоматически. |
+| `docs/evidence/` | Live evidence со стенда: k3s status, Helm release, HTTP smoke, logs, reporter output. |
+
+### `services/alert-bot/` и `services/reporter/`
+
+Опциональные observability-сервисы. По умолчанию они не деплоятся, потому что в `values.yaml` стоит `alerting.enabled=false`.
+
+| Путь | Что делает |
+|------|-------------|
+| `services/alert-bot/app/main.py` | FastAPI endpoints `/webhook/alertmanager`, `/webhook/grafana`, `/webhook/gitlab`, `/webhook/report`. |
+| `services/alert-bot/Dockerfile` | Multi-stage non-root Docker image alert-bot. |
+| `services/reporter/app/report.py` | Формирует Markdown-отчёт по Kubernetes/Prometheus/Loki. |
+| `services/reporter/Dockerfile` | Multi-stage non-root Docker image reporter. |
 
 Что показывать на защите:
 - `values-kube-prometheus.yaml`

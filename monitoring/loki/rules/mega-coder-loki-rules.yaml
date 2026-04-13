@@ -1,0 +1,17 @@
+# Example Loki ruler file. It is not applied automatically by the current chart.
+# Use it if Loki ruler is enabled, or show it as the planned log-alert source.
+groups:
+  - name: mega-coder.logs
+    rules:
+      - alert: LokiErrorSpike
+        expr: sum(rate({namespace="mega-coder"} |= "ERROR" [5m])) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          app: mega-coder
+          env: dev
+          cluster: k3s-home
+        annotations:
+          summary: "Error log spike in MEGA CODER"
+          description: "Loki found an increased rate of ERROR lines in namespace mega-coder."
+          runbook_url: "RUNBOOKS.md#lokierrorspike"

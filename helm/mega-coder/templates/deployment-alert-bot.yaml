@@ -1,0 +1,105 @@
+{{- if .Values.alerting.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-alert-bot
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: alert-bot
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+spec:
+  {{- if .Values.alerting.alertBot.hostNetwork }}
+  # hostNetwork занимает порт на узле, поэтому rolling update с maxSurge создаст конфликт.
+  # Recreate делает обновление предсказуемым: сначала старый pod, затем новый pod.
+  strategy:
+    type: Recreate
+  {{- end }}
+  # Одной реплики достаточно: сервис stateless, а Alertmanager умеет повторять webhook.
+  replicas: {{ .Values.replicaCount.alertBot }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: alert-bot
+      app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: alert-bot
+        app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+    spec:
+      {{- if .Values.alerting.alertBot.hostNetwork }}
+      # На домашнем стенде Telegram может быть доступен только через сетевой путь хоста.
+      # hostNetwork включается явно через values и не влияет на остальные сервисы chart.
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10002
+        runAsGroup: 10002
+      containers:
+        - name: alert-bot
+          # Этот контейнер принимает webhooks и отправляет сообщения в Telegram.
+          image: {{ include "mega-coder.image" (dict "root" . "image" .Values.images.alertBot) }}
+          imagePullPolicy: {{ .Values.images.alertBot.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.alertBotPort }}
+          env:
+            # Нечувствительные настройки храним прямо в values, секреты приходят из Kubernetes Secret.
+            - name: LOG_LEVEL
+              value: {{ .Values.alerting.alertBot.logLevel | quote }}
+            - name: CLUSTER_NAME
+              value: {{ .Values.alerting.clusterName | quote }}
+            - name: APP_ENV
+              value: {{ .Values.alerting.appEnv | quote }}
+            - name: SEND_RETRIES
+              value: {{ .Values.alerting.alertBot.sendRetries | quote }}
+            - name: SEND_TIMEOUT_SECONDS
+              value: {{ .Values.alerting.alertBot.sendTimeoutSeconds | quote }}
+            - name: TELEGRAM_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (printf "%s-alerting-secret" (include "mega-coder.fullname" .)) .Values.alerting.secrets.existingSecret }}
+                  key: TELEGRAM_BOT_TOKEN
+                  optional: true
+            - name: TELEGRAM_CHAT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (printf "%s-alerting-secret" (include "mega-coder.fullname" .)) .Values.alerting.secrets.existingSecret }}
+                  key: TELEGRAM_CHAT_ID
+                  optional: true
+            - name: TELEGRAM_PARSE_MODE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (printf "%s-alerting-secret" (include "mega-coder.fullname" .)) .Values.alerting.secrets.existingSecret }}
+                  key: TELEGRAM_PARSE_MODE
+                  optional: true
+            - name: ALERTMANAGER_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (printf "%s-alerting-secret" (include "mega-coder.fullname" .)) .Values.alerting.secrets.existingSecret }}
+                  key: ALERTMANAGER_WEBHOOK_SECRET
+                  optional: true
+            - name: GITLAB_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (printf "%s-alerting-secret" (include "mega-coder.fullname" .)) .Values.alerting.secrets.existingSecret }}
+                  key: GITLAB_WEBHOOK_SECRET
+                  optional: true
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+{{- end }}

@@ -1,0 +1,92 @@
+{{- if and .Values.alerting.enabled .Values.alerting.reporter.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-reporter
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: reporter
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-reporter
+  namespace: {{ .Values.alerting.reporter.namespace }}
+rules:
+  # Reporter читает только то, что нужно для отчёта: pods/deployments/events.
+  - apiGroups: [""]
+    resources: ["pods", "events"]
+    verbs: ["get", "list"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-reporter
+  namespace: {{ .Values.alerting.reporter.namespace }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "mega-coder.fullname" . }}-reporter
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "mega-coder.fullname" . }}-reporter
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-reporter
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: reporter
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+spec:
+  # CronJob показывает production-like reporting: отчёт формируется регулярно.
+  schedule: {{ .Values.alerting.reporter.schedule | quote }}
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/component: reporter
+            app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: {{ include "mega-coder.fullname" . }}-reporter
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10003
+            runAsGroup: 10003
+          containers:
+            - name: reporter
+              # Контейнер формирует Markdown-отчёт и пишет его в logs/stdout CronJob.
+              image: {{ include "mega-coder.image" (dict "root" . "image" .Values.images.reporter) }}
+              imagePullPolicy: {{ .Values.images.reporter.pullPolicy }}
+              env:
+                - name: REPORT_NAMESPACE
+                  value: {{ .Values.alerting.reporter.namespace | quote }}
+                - name: PROMETHEUS_URL
+                  value: {{ .Values.alerting.reporter.prometheusUrl | quote }}
+                - name: LOKI_URL
+                  value: {{ .Values.alerting.reporter.lokiUrl | quote }}
+                - name: SEND_REPORT_TO_TELEGRAM
+                  value: {{ .Values.alerting.reporter.sendReportToTelegram | quote }}
+                - name: ALERT_BOT_REPORT_URL
+                  value: "http://{{ include "mega-coder.fullname" . }}-alert-bot:{{ .Values.service.alertBotPort }}/webhook/report"
+                - name: ALERTMANAGER_WEBHOOK_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ default (printf "%s-alerting-secret" (include "mega-coder.fullname" .)) .Values.alerting.secrets.existingSecret }}
+                      key: ALERTMANAGER_WEBHOOK_SECRET
+                      optional: true
+{{- end }}

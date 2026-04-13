@@ -1,0 +1,37 @@
+{
+  "receiver": "telegram-alert-bot",
+  "status": "resolved",
+  "groupLabels": {
+    "alertname": "PodCrashLooping",
+    "severity": "critical"
+  },
+  "commonLabels": {
+    "alertname": "PodCrashLooping",
+    "severity": "critical",
+    "namespace": "mega-coder",
+    "cluster": "k3s-home",
+    "env": "dev",
+    "app": "mega-coder"
+  },
+  "alerts": [
+    {
+      "status": "resolved",
+      "labels": {
+        "alertname": "PodCrashLooping",
+        "severity": "critical",
+        "namespace": "mega-coder",
+        "pod": "mega-mega-coder-api-demo",
+        "cluster": "k3s-home",
+        "env": "dev",
+        "app": "mega-coder"
+      },
+      "annotations": {
+        "summary": "Pod восстановился",
+        "description": "Тестовый pod снова работает штатно: это демонстрационное resolved-сообщение.",
+        "runbook_url": "RUNBOOKS.md#podcrashlooping"
+      },
+      "startsAt": "2026-04-13T13:00:00Z",
+      "endsAt": "2026-04-13T13:10:00Z"
+    }
+  ]
+}

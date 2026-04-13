@@ -1,0 +1,16 @@
+{
+  "object_kind": "push",
+  "user_name": "Sergey Mega",
+  "project": {
+    "path_with_namespace": "MEGA/deveps-mega-coder",
+    "web_url": "https://gitlub.ru/MEGA/deveps-mega-coder"
+  },
+  "ref": "refs/heads/main",
+  "checkout_sha": "76475c5fa36d46e563ea3ff2c98a7be284fc5186",
+  "commits": [
+    {
+      "id": "76475c5fa36d46e563ea3ff2c98a7be284fc5186",
+      "message": "Docs: align project map with submitted repo"
+    }
+  ]
+}

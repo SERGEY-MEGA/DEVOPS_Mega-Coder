@@ -24,6 +24,16 @@ images:
     repository: worker
     tag: "dev"
     pullPolicy: IfNotPresent
+  alertBot:
+    # Webhook receiver для Alertmanager/Grafana/GitLab -> Telegram.
+    repository: alert-bot
+    tag: "dev"
+    pullPolicy: IfNotPresent
+  reporter:
+    # CronJob, который собирает Markdown-отчёт по Kubernetes/Prometheus/Loki.
+    repository: reporter
+    tag: "dev"
+    pullPolicy: IfNotPresent
   redis:
     # Образ с Docker Hub; imageRegistry не наследуем от global (см. _helpers.tpl).
     imageRegistry: docker.io
@@ -36,6 +46,7 @@ replicaCount:
   api: 2
   web: 2
   worker: 2
+  alertBot: 1
   redis: 1
 
 service:
@@ -48,10 +59,49 @@ service:
   apiPort: 8000
   workerPort: 8081
   redisPort: 6379
+  alertBotPort: 8088
 
 secrets:
   # Значение переопределяется при helm install --set или из CI (GitLab Variable).
   appSharedSecret: "change-me"
+
+alerting:
+  # Включает production-like слой incident alerting: webhook bot + reporter + PrometheusRule.
+  # По умолчанию выключено, чтобы не менять уже рабочий live-deploy перед сдачей.
+  enabled: false
+  clusterName: k3s-home
+  appEnv: dev
+  # Если secret уже создан вручную, задайте его имя здесь и chart не будет создавать новый secret.
+  secrets:
+    existingSecret: ""
+    telegramBotToken: ""
+    telegramChatId: ""
+    telegramParseMode: HTML
+    alertmanagerWebhookSecret: ""
+    gitlabWebhookSecret: ""
+  alertBot:
+    logLevel: INFO
+    sendRetries: 3
+    sendTimeoutSeconds: 8
+    # По умолчанию pod использует обычную Kubernetes-сеть.
+    # Для домашнего стенда можно включить hostNetwork, если Telegram доступен с хоста,
+    # но провайдер/прокси блокирует прямой egress из pod-сети.
+    hostNetwork: false
+    service:
+      type: ClusterIP
+  reporter:
+    enabled: true
+    # Редкий запуск снижает нагрузку; для защиты лучше запускать вручную kubectl create job --from=cronjob/...
+    schedule: "0 */6 * * *"
+    namespace: mega-coder
+    prometheusUrl: "http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090"
+    lokiUrl: "http://loki.monitoring.svc:3100"
+    sendReportToTelegram: false
+  prometheusRule:
+    enabled: true
+    # kube-prometheus-stack часто выбирает PrometheusRule по label release=monitoring.
+    labels:
+      release: monitoring
 
 config:
   api:

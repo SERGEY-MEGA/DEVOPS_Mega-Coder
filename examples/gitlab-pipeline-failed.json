@@ -1,0 +1,16 @@
+{
+  "object_kind": "pipeline",
+  "user": {
+    "name": "Sergey Mega"
+  },
+  "project": {
+    "path_with_namespace": "MEGA/deveps-mega-coder",
+    "web_url": "https://gitlub.ru/MEGA/deveps-mega-coder"
+  },
+  "object_attributes": {
+    "status": "failed",
+    "ref": "main",
+    "sha": "76475c5fa36d46e563ea3ff2c98a7be284fc5186",
+    "url": "https://gitlub.ru/MEGA/deveps-mega-coder/-/pipelines/23"
+  }
+}

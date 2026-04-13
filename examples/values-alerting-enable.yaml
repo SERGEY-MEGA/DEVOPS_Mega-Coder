@@ -1,0 +1,18 @@
+# Safe overlay for enabling alerting manually.
+# Base values.yaml keeps alerting disabled so the existing demo deploy is not changed accidentally.
+alerting:
+  enabled: true
+  clusterName: k3s-home
+  appEnv: dev
+  secrets:
+    # Create this secret manually from BOT_SETUP.md; do not store real token/chat_id in git.
+    existingSecret: mega-coder-alerting-secret
+  alertBot:
+    # Для домашнего k3s-стенда: pod использует egress хоста, если Telegram недоступен из pod-сети.
+    hostNetwork: true
+  reporter:
+    enabled: true
+    schedule: "0 */6 * * *"
+    sendReportToTelegram: false
+  prometheusRule:
+    enabled: true

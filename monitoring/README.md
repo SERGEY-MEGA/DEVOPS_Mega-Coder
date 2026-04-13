@@ -61,3 +61,29 @@ helm upgrade --install loki grafana/loki-stack \
 3. **Логи приложения** — в Explore выберите datasource Loki, запрос `{namespace="mega-coder"}`.
 
 Скриншоты этих экранов приложите к отчёту (`REPORT.md`).
+
+## 3) Alerting overlay (опционально)
+
+Alerting добавлен безопасно: базовый стенд не меняется, пока в Helm не включён флаг:
+
+```yaml
+alerting:
+  enabled: true
+```
+
+Связанные файлы:
+
+- `monitoring/prometheus/rules/mega-coder-alerts.yaml` — standalone PrometheusRule manifest.
+- `monitoring/alertmanager/alertmanager.yml` — пример Alertmanager route/receiver.
+- `monitoring/loki/rules/mega-coder-loki-rules.yaml` — пример Loki ruler rule.
+- `examples/values-alerting-enable.yaml` — overlay для ручного включения chart templates.
+- `BOT_SETUP.md` — настройка Telegram token/chat_id через Kubernetes Secret.
+- `DEMO_ALERTS.md` — как показать firing/resolved и GitLab webhook.
+
+Alertmanager receiver указывает на internal service:
+
+```text
+http://mega-mega-coder-alert-bot.mega-coder.svc.cluster.local:8088/webhook/alertmanager
+```
+
+Это не открывает новый публичный порт и не ломает текущий Ingress/NodePort.

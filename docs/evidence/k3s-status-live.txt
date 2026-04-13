@@ -1,0 +1,33 @@
+NAME     STATUS   ROLES           AGE   VERSION        INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+server   Ready    control-plane   19d   v1.34.5+k3s1   192.168.1.29   <none>        Ubuntu 24.04.4 LTS   6.17.0-19-generic   containerd://2.1.5-k3s1
+
+NAME                                               READY   STATUS      RESTARTS   AGE     IP             NODE     NOMINATED NODE   READINESS GATES
+pod/mega-mega-coder-alert-bot-57648659f9-cs24d     1/1     Running     0          2m23s   192.168.1.29   server   <none>           <none>
+pod/mega-mega-coder-api-78866b6f4d-pnfj2           1/1     Running     0          21h     10.42.0.83     server   <none>           <none>
+pod/mega-mega-coder-api-78866b6f4d-slrrb           1/1     Running     0          21h     10.42.0.78     server   <none>           <none>
+pod/mega-mega-coder-redis-56647786b9-tg6cn         1/1     Running     0          19d     10.42.0.13     server   <none>           <none>
+pod/mega-mega-coder-web-7f7b649ddc-7nn85           1/1     Running     0          21h     10.42.0.80     server   <none>           <none>
+pod/mega-mega-coder-web-7f7b649ddc-tcvjl           1/1     Running     0          21h     10.42.0.82     server   <none>           <none>
+pod/mega-mega-coder-worker-7db4f67ddf-69b5c        1/1     Running     0          21h     10.42.0.79     server   <none>           <none>
+pod/mega-mega-coder-worker-7db4f67ddf-cxm8v        1/1     Running     0          21h     10.42.0.81     server   <none>           <none>
+pod/reporter-final-evidence-20260413232534-8fw6w   0/1     Completed   0          23m     10.42.0.88     server   <none>           <none>
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                        SELECTOR
+deployment.apps/mega-mega-coder-alert-bot   1/1     1            1           93m   alert-bot    docker.io/library/mega-coder-alert-bot:alerting-demo          app.kubernetes.io/component=alert-bot,app.kubernetes.io/name=mega-coder
+deployment.apps/mega-mega-coder-api         2/2     2            2           19d   api          192.168.1.29:5050/mega/deveps-mega-coder/api:941e819e-20      app.kubernetes.io/component=api,app.kubernetes.io/name=mega-coder
+deployment.apps/mega-mega-coder-redis       1/1     1            1           19d   redis        docker.io/library/redis:7.2.7-alpine                          app.kubernetes.io/component=redis,app.kubernetes.io/name=mega-coder
+deployment.apps/mega-mega-coder-web         2/2     2            2           19d   web          192.168.1.29:5050/mega/deveps-mega-coder/web:941e819e-20      app.kubernetes.io/component=web,app.kubernetes.io/name=mega-coder
+deployment.apps/mega-mega-coder-worker      2/2     2            2           19d   worker       192.168.1.29:5050/mega/deveps-mega-coder/worker:941e819e-20   app.kubernetes.io/component=worker,app.kubernetes.io/name=mega-coder
+
+NAME                                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+service/mega-mega-coder-alert-bot   ClusterIP   10.43.127.24    <none>        8088/TCP         93m   app.kubernetes.io/component=alert-bot,app.kubernetes.io/name=mega-coder
+service/mega-mega-coder-api         ClusterIP   10.43.22.63     <none>        8000/TCP         19d   app.kubernetes.io/component=api,app.kubernetes.io/name=mega-coder
+service/mega-mega-coder-redis       ClusterIP   10.43.165.90    <none>        6379/TCP         19d   app.kubernetes.io/component=redis,app.kubernetes.io/name=mega-coder
+service/mega-mega-coder-web         NodePort    10.43.147.110   <none>        8080:30080/TCP   19d   app.kubernetes.io/component=web,app.kubernetes.io/name=mega-coder
+service/mega-mega-coder-worker      ClusterIP   10.43.215.154   <none>        8081/TCP         19d   app.kubernetes.io/component=worker,app.kubernetes.io/name=mega-coder
+
+NAME                                     SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE   CONTAINERS   IMAGES                                                SELECTOR
+cronjob.batch/mega-mega-coder-reporter   0 */6 * * *   <none>     False     0        <none>          93m   reporter     docker.io/library/mega-coder-reporter:alerting-demo   <none>
+
+NAME                                                          AGE
+prometheusrule.monitoring.coreos.com/mega-mega-coder-alerts   93m

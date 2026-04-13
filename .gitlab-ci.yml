@@ -92,6 +92,38 @@ build_worker:
         --cache=true \
         --cache-repo "${KANIKO_CACHE_REPO}"
 
+build_alert_bot:
+  extends: .kaniko_build
+  rules:
+    # Alerting-компоненты opt-in: по умолчанию не трогаем рабочий deploy перед защитой.
+    - if: $ENABLE_ALERTING_BUILDS == "true"
+  script:
+    - |
+      # Сборка webhook bridge Alertmanager/Grafana/GitLab -> Telegram.
+      /kaniko/executor \
+        --context "${CI_PROJECT_DIR}/services/alert-bot" \
+        --dockerfile "${CI_PROJECT_DIR}/services/alert-bot/Dockerfile" \
+        --destination "${CI_REGISTRY_IMAGE}/alert-bot:${IMAGE_TAG}" \
+        --insecure-registry "${CI_REGISTRY}" \
+        --cache=true \
+        --cache-repo "${KANIKO_CACHE_REPO}"
+
+build_reporter:
+  extends: .kaniko_build
+  rules:
+    # Reporter тоже opt-in, чтобы не увеличивать время обычного pipeline.
+    - if: $ENABLE_ALERTING_BUILDS == "true"
+  script:
+    - |
+      # Сборка CronJob-сервиса, который формирует Markdown-отчёты по кластеру.
+      /kaniko/executor \
+        --context "${CI_PROJECT_DIR}/services/reporter" \
+        --dockerfile "${CI_PROJECT_DIR}/services/reporter/Dockerfile" \
+        --destination "${CI_REGISTRY_IMAGE}/reporter:${IMAGE_TAG}" \
+        --insecure-registry "${CI_REGISTRY}" \
+        --cache=true \
+        --cache-repo "${KANIKO_CACHE_REPO}"
+
 # --- deploy: Helm на main, с atomic rollback при неуспешном релизе ---
 deploy_helm:
   stage: deploy

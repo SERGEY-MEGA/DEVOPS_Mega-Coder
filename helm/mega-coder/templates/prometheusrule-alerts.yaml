@@ -1,0 +1,113 @@
+{{- if and .Values.alerting.enabled .Values.alerting.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "mega-coder.fullname" . }}-alerts
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: alerting
+    app.kubernetes.io/name: {{ include "mega-coder.name" . }}
+    {{- with .Values.alerting.prometheusRule.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    - name: mega-coder.kubernetes
+      rules:
+        - alert: PodCrashLooping
+          expr: max_over_time(kube_pod_container_status_waiting_reason{namespace="{{ .Values.alerting.reporter.namespace }}",reason="CrashLoopBackOff"}[5m]) >= 1
+          for: 2m
+          labels:
+            severity: critical
+            app: mega-coder
+            env: {{ .Values.alerting.appEnv | quote }}
+            cluster: {{ .Values.alerting.clusterName | quote }}
+          annotations:
+            summary: "Pod находится в CrashLoopBackOff"
+            description: "Pod {{`{{ $labels.pod }}`}} в namespace {{`{{ $labels.namespace }}`}} постоянно перезапускается."
+            runbook_url: "RUNBOOKS.md#podcrashlooping"
+        - alert: PodRestartTooOften
+          expr: increase(kube_pod_container_status_restarts_total{namespace="{{ .Values.alerting.reporter.namespace }}"}[15m]) > 3
+          for: 5m
+          labels:
+            severity: warning
+            app: mega-coder
+            env: {{ .Values.alerting.appEnv | quote }}
+            cluster: {{ .Values.alerting.clusterName | quote }}
+          annotations:
+            summary: "Pod перезапускается слишком часто"
+            description: "Pod {{`{{ $labels.pod }}`}}, контейнер {{`{{ $labels.container }}`}}, перезапустился больше 3 раз за 15 минут."
+            runbook_url: "RUNBOOKS.md#podrestarttoooften"
+        - alert: DeploymentReplicasMismatch
+          expr: kube_deployment_spec_replicas{namespace="{{ .Values.alerting.reporter.namespace }}"} != kube_deployment_status_replicas_available{namespace="{{ .Values.alerting.reporter.namespace }}"}
+          for: 5m
+          labels:
+            severity: critical
+            app: mega-coder
+            env: {{ .Values.alerting.appEnv | quote }}
+            cluster: {{ .Values.alerting.clusterName | quote }}
+          annotations:
+            summary: "Количество реплик Deployment не совпадает"
+            description: "У Deployment {{`{{ $labels.deployment }}`}} желаемое количество реплик отличается от доступного."
+            runbook_url: "RUNBOOKS.md#deploymentreplicasmismatch"
+        - alert: PodNotReady
+          expr: max_over_time(kube_pod_status_ready{namespace="{{ .Values.alerting.reporter.namespace }}",condition="false"}[10m]) == 1
+          for: 10m
+          labels:
+            severity: warning
+            app: mega-coder
+            env: {{ .Values.alerting.appEnv | quote }}
+            cluster: {{ .Values.alerting.clusterName | quote }}
+          annotations:
+            summary: "Pod не готов"
+            description: "Pod {{`{{ $labels.pod }}`}} находится в состоянии not ready больше 10 минут."
+            runbook_url: "RUNBOOKS.md#podnotready"
+        - alert: HighCPUUsage
+          expr: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Values.alerting.reporter.namespace }}",container!="",pod!=""}[5m])) by (namespace,pod) > 0.2
+          for: 10m
+          labels:
+            severity: warning
+            app: mega-coder
+            env: {{ .Values.alerting.appEnv | quote }}
+            cluster: {{ .Values.alerting.clusterName | quote }}
+          annotations:
+            summary: "Высокая нагрузка CPU"
+            description: "Pod {{`{{ $labels.pod }}`}} использует больше 0.2 CPU core в течение 10 минут."
+            runbook_url: "RUNBOOKS.md#highcpuusage"
+        - alert: HighMemoryUsage
+          expr: sum(container_memory_working_set_bytes{namespace="{{ .Values.alerting.reporter.namespace }}",container!="",pod!=""}) by (namespace,pod) > 314572800
+          for: 10m
+          labels:
+            severity: warning
+            app: mega-coder
+            env: {{ .Values.alerting.appEnv | quote }}
+            cluster: {{ .Values.alerting.clusterName | quote }}
+          annotations:
+            summary: "Высокое потребление памяти"
+            description: "Pod {{`{{ $labels.pod }}`}} использует больше 300 MiB памяти в течение 10 минут."
+            runbook_url: "RUNBOOKS.md#highmemoryusage"
+        - alert: TargetDown
+          expr: up{namespace=~"{{ .Values.alerting.reporter.namespace }}|monitoring"} == 0
+          for: 5m
+          labels:
+            severity: critical
+            app: mega-coder
+            env: {{ .Values.alerting.appEnv | quote }}
+            cluster: {{ .Values.alerting.clusterName | quote }}
+          annotations:
+            summary: "Prometheus target недоступен"
+            description: "Target {{`{{ $labels.job }}`}} / {{`{{ $labels.instance }}`}} недоступен для Prometheus."
+            runbook_url: "RUNBOOKS.md#targetdown"
+        - alert: TooMany5xx
+          expr: sum(rate(nginx_ingress_controller_requests{exported_namespace="{{ .Values.alerting.reporter.namespace }}",status=~"5.."}[5m])) > 1
+          for: 5m
+          labels:
+            severity: warning
+            app: mega-coder
+            env: {{ .Values.alerting.appEnv | quote }}
+            cluster: {{ .Values.alerting.clusterName | quote }}
+          annotations:
+            summary: "Слишком много HTTP 5xx ответов"
+            description: "Ingress возвращает больше 1 ответа 5xx в секунду для MEGA CODER. Правило активно, если установлены метрики ingress-nginx."
+            runbook_url: "RUNBOOKS.md#toomany5xx"
+{{- end }}

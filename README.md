@@ -8,6 +8,12 @@
 Основные документы:
 
 - **[REPORT.md](./REPORT.md)** — полный отчёт по проекту.
+- **[REPORT_ALERTING.md](./REPORT_ALERTING.md)** — отдельный отчёт по Prometheus/Alertmanager/Grafana → Telegram alerting.
+- **[docs/alerting/REPORT_ALERTING.pdf](./docs/alerting/REPORT_ALERTING.pdf)** — PDF-версия alerting-отчёта для сдачи.
+- **[BOT_SETUP.md](./BOT_SETUP.md)** — как безопасно создать Telegram bot secret и не коммитить токены.
+- **[DEMO_ALERTS.md](./DEMO_ALERTS.md)** — как показать firing/resolved alert, GitLab event и reporter.
+- **[docs/evidence/](./docs/evidence/)** — реальные live evidence: k3s status, Helm release, HTTP smoke, alert-bot logs, reporter output.
+- **[RUNBOOKS.md](./RUNBOOKS.md)** — runbook’и по ключевым alert rules.
 - **[PROJECT_MAP.md](./PROJECT_MAP.md)** — где лежит код и что делает каждая папка.
 - **[DEFENSE_GUIDE.md](./DEFENSE_GUIDE.md)** — шпаргалка для устной защиты.
 - **[DEFENSE_2MIN.md](./DEFENSE_2MIN.md)** — сверхкороткий сценарий защиты на 2 минуты.
@@ -27,6 +33,7 @@
 | Ansible | `cd ansible && ansible-galaxy collection install -r requirements.yml && ansible-playbook -i inventory/hosts.ini site.yml` |
 | 2-node k3s | `cd ansible && ansible-playbook -i inventory/hosts.ini k3s-cluster.yml` |
 | Мониторинг | см. [monitoring/README.md](./monitoring/README.md) |
+| Alerting overlay | `helm upgrade --install mega ./helm/mega-coder -n mega-coder -f helm/mega-coder/values.yaml -f examples/values-alerting-enable.yaml` |
 
 ## Важная оговорка для защиты
 
@@ -52,5 +59,18 @@ Pipeline: **pre_build** → **build** (три образа) → **deploy** (то
 - cache слоёв сборки через Kaniko;
 - разделение `merge_request` / branch pipeline через `workflow: rules`;
 - автоматический rollback релиза через `helm --atomic --cleanup-on-fail`.
+- opt-in сборка `alert-bot` и `reporter` через переменную `ENABLE_ALERTING_BUILDS=true`; по умолчанию эти job не запускаются, чтобы не менять рабочий деплой.
+
+## Alerting / Telegram
+
+Alerting-компоненты добавлены как изолированное расширение и **выключены по умолчанию**:
+
+- `services/alert-bot/` — webhook receiver для Alertmanager, Grafana и GitLab webhooks.
+- `services/reporter/` — Markdown reporter по Kubernetes/Prometheus/Loki.
+- `monitoring/prometheus/rules/mega-coder-alerts.yaml` — alert rules.
+- `monitoring/alertmanager/alertmanager.yml` — пример route/receiver до Telegram bridge.
+- `examples/values-alerting-enable.yaml` — безопасный overlay для ручного включения.
+
+Секреты `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `ALERTMANAGER_WEBHOOK_SECRET`, `GITLAB_WEBHOOK_SECRET` задаются только через Kubernetes Secret или CI/CD Variables. Реальные значения не хранятся в git.
 
 **Отчёт по курсу:** файл **REPORT.md** (при необходимости экспорт в PDF — см. раздел 0 в отчёте).

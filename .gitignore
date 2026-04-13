@@ -3,6 +3,10 @@
 terraform/.terraform/
 terraform/*.tfstate.*
 crash.log
+.env
+.env.*
+!.env.example
+!examples/.env.example
 
 # Ansible: реальный inventory с IP (шаблон — hosts.ini.example).
 ansible/inventory/hosts.ini
