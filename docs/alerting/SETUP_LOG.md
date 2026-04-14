@@ -93,10 +93,12 @@ Project webhook `new user registered` стандартно недоступен,
 - создан Kubernetes Secret `mega-coder-alerting-secret` без сохранения token/chat_id в git;
 - собраны и импортированы в k3s локальные images `mega-coder-alert-bot:alerting-demo` и `mega-coder-reporter:alerting-demo`;
 - применён Helm overlay `examples/values-alerting-enable.yaml`;
-- release `mega` обновлён до revision 15;
+- release `mega` обновлён до revision 24 после финальной проверки 2026-04-14;
 - `alert-bot` запущен в namespace `mega-coder`;
 - reporter запускается вручную через CronJob и пишет Markdown-отчет;
 - test `firing` и `resolved` Alertmanager payload успешно отправлены в Telegram;
+- включён интерактивный режим Telegram `/status` через `alerting.alertBot.enableCommands=true`;
+- в `.gitlab-ci.yml` добавлен `--reuse-values`, чтобы основной deploy приложения не удалял вручную включённый alerting overlay;
 - live reporter evidence сохранён в `docs/evidence/reporter-live.md`.
 
 Важная особенность стенда: Telegram API с хоста доступен, но из обычной pod-сети был недоступен. Поэтому для `alert-bot` в demo overlay включён `alerting.alertBot.hostNetwork=true`, а в Deployment strategy используется `Recreate`, чтобы при обновлении не было конфликта порта `8088`.

@@ -1,9 +1,14 @@
-NAME	NAMESPACE 	REVISION	UPDATED                                	STATUS  	CHART           	APP VERSION
-mega	mega-coder	15      	2026-04-13 23:08:16.969498472 +0300 MSK	deployed	mega-coder-0.1.0	1.0.0
+NAME: mega
+LAST DEPLOYED: Tue Apr 14 13:30:04 2026
+NAMESPACE: mega-coder
+STATUS: deployed
+REVISION: 24
+TEST SUITE: None
 
 USER-SUPPLIED VALUES:
 alerting:
   alertBot:
+    enableCommands: true
     hostNetwork: true
   appEnv: dev
   clusterName: k3s-home
@@ -26,14 +31,14 @@ images:
     repository: mega-coder-alert-bot
     tag: alerting-demo
   api:
-    tag: 941e819e-20
+    tag: 6beccaa9-28
   reporter:
     imageRegistry: docker.io/library
     repository: mega-coder-reporter
     tag: alerting-demo
   web:
-    tag: 941e819e-20
+    tag: 6beccaa9-28
   worker:
-    tag: 941e819e-20
+    tag: 6beccaa9-28
 secrets:
   appSharedSecret: <masked-live-secret>

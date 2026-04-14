@@ -10,6 +10,8 @@
 - `docs/screenshots/gitlab-event-message.png` — screenshot evidence, что GitLab webhook test отправлен в Telegram (`sent=true`).
 - `docs/screenshots/report-in-telegram.png` — screenshot evidence reporter/live summary.
 - `docs/screenshots/k8s-pods-status.png` — screenshot evidence с live `kubectl get nodes/pods/deploy/svc`.
+- `docs/screenshots/telegram-status-command.png` — свежий Telegram-скрин 2026-04-14: команда `/status` и русский ответ бота с HTTP 200 по приложению, API, Grafana и GitLab.
+- `docs/screenshots/telegram-help-status-command.png` — свежий Telegram-скрин 2026-04-14: команды `/help` и `/status`, чтобы показать интерактивный режим бота на защите.
 
 **Актуальные скрины чата** (firing EN/RU, resolved, GitLab **gitlub.ru**, отчёт reporter) лежат в **корневой** папке [`alert-manager/`](../../alert-manager/README.md) — см. `telegram-01-*.png` … `telegram-03-*.png`.
 

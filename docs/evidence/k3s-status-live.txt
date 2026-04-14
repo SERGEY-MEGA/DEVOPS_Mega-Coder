@@ -1,32 +1,32 @@
 NAME     STATUS   ROLES           AGE   VERSION        INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
 server   Ready    control-plane   19d   v1.34.5+k3s1   192.168.1.29   <none>        Ubuntu 24.04.4 LTS   6.17.0-19-generic   containerd://2.1.5-k3s1
 
-NAME                                            READY   STATUS    RESTARTS   AGE     IP             NODE     NOMINATED NODE   READINESS GATES
-pod/mega-mega-coder-alert-bot-5db54c8ff-qdxc6   1/1     Running   0          2m30s   192.168.1.29   server   <none>           <none>
-pod/mega-mega-coder-api-66fb58f59-8jlhc         1/1     Running   0          10h     10.42.0.107    server   <none>           <none>
-pod/mega-mega-coder-api-66fb58f59-j97cb         1/1     Running   0          10h     10.42.0.103    server   <none>           <none>
-pod/mega-mega-coder-redis-56647786b9-tg6cn      1/1     Running   0          19d     10.42.0.13     server   <none>           <none>
-pod/mega-mega-coder-web-67885fcb96-7rcqn        1/1     Running   0          10h     10.42.0.105    server   <none>           <none>
-pod/mega-mega-coder-web-67885fcb96-dhhs5        1/1     Running   0          10h     10.42.0.104    server   <none>           <none>
-pod/mega-mega-coder-worker-854cc8d48b-chhvv     1/1     Running   0          10h     10.42.0.106    server   <none>           <none>
-pod/mega-mega-coder-worker-854cc8d48b-hrtzh     1/1     Running   0          10h     10.42.0.102    server   <none>           <none>
+NAME                                         READY   STATUS    RESTARTS   AGE     IP             NODE     NOMINATED NODE   READINESS GATES
+mega-mega-coder-alert-bot-7467d97c5c-p6s5w   1/1     Running   0          63s     192.168.1.29   server   <none>           <none>
+mega-mega-coder-api-57cf56c9d4-bg7p7         1/1     Running   0          7m14s   10.42.0.114    server   <none>           <none>
+mega-mega-coder-api-57cf56c9d4-ljbxt         1/1     Running   0          7m      10.42.0.119    server   <none>           <none>
+mega-mega-coder-redis-56647786b9-tg6cn       1/1     Running   0          19d     10.42.0.13     server   <none>           <none>
+mega-mega-coder-web-67f7654c6c-6g4r4         1/1     Running   0          7m2s    10.42.0.117    server   <none>           <none>
+mega-mega-coder-web-67f7654c6c-c7g2q         1/1     Running   0          7m14s   10.42.0.115    server   <none>           <none>
+mega-mega-coder-worker-554f7bc8b9-9z4qt      1/1     Running   0          7m1s    10.42.0.118    server   <none>           <none>
+mega-mega-coder-worker-554f7bc8b9-zv8v9      1/1     Running   0          7m14s   10.42.0.116    server   <none>           <none>
 
-NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES                                                        SELECTOR
-deployment.apps/mega-mega-coder-alert-bot   1/1     1            1           2m31s   alert-bot    docker.io/library/mega-coder-alert-bot:alerting-demo          app.kubernetes.io/component=alert-bot,app.kubernetes.io/name=mega-coder
-deployment.apps/mega-mega-coder-api         2/2     2            2           19d     api          192.168.1.29:5050/mega/deveps-mega-coder/api:0650905d-26      app.kubernetes.io/component=api,app.kubernetes.io/name=mega-coder
-deployment.apps/mega-mega-coder-redis       1/1     1            1           19d     redis        docker.io/library/redis:7.2.7-alpine                          app.kubernetes.io/component=redis,app.kubernetes.io/name=mega-coder
-deployment.apps/mega-mega-coder-web         2/2     2            2           19d     web          192.168.1.29:5050/mega/deveps-mega-coder/web:0650905d-26      app.kubernetes.io/component=web,app.kubernetes.io/name=mega-coder
-deployment.apps/mega-mega-coder-worker      2/2     2            2           19d     worker       192.168.1.29:5050/mega/deveps-mega-coder/worker:0650905d-26   app.kubernetes.io/component=worker,app.kubernetes.io/name=mega-coder
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                        SELECTOR
+mega-mega-coder-alert-bot   1/1     1            1           63s   alert-bot    docker.io/library/mega-coder-alert-bot:alerting-demo          app.kubernetes.io/component=alert-bot,app.kubernetes.io/name=mega-coder
+mega-mega-coder-api         2/2     2            2           19d   api          192.168.1.29:5050/mega/deveps-mega-coder/api:6beccaa9-28      app.kubernetes.io/component=api,app.kubernetes.io/name=mega-coder
+mega-mega-coder-redis       1/1     1            1           19d   redis        docker.io/library/redis:7.2.7-alpine                          app.kubernetes.io/component=redis,app.kubernetes.io/name=mega-coder
+mega-mega-coder-web         2/2     2            2           19d   web          192.168.1.29:5050/mega/deveps-mega-coder/web:6beccaa9-28      app.kubernetes.io/component=web,app.kubernetes.io/name=mega-coder
+mega-mega-coder-worker      2/2     2            2           19d   worker       192.168.1.29:5050/mega/deveps-mega-coder/worker:6beccaa9-28   app.kubernetes.io/component=worker,app.kubernetes.io/name=mega-coder
 
-NAME                                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE     SELECTOR
-service/mega-mega-coder-alert-bot   ClusterIP   10.43.218.76    <none>        8088/TCP         2m31s   app.kubernetes.io/component=alert-bot,app.kubernetes.io/name=mega-coder
-service/mega-mega-coder-api         ClusterIP   10.43.22.63     <none>        8000/TCP         19d     app.kubernetes.io/component=api,app.kubernetes.io/name=mega-coder
-service/mega-mega-coder-redis       ClusterIP   10.43.165.90    <none>        6379/TCP         19d     app.kubernetes.io/component=redis,app.kubernetes.io/name=mega-coder
-service/mega-mega-coder-web         NodePort    10.43.147.110   <none>        8080:30080/TCP   19d     app.kubernetes.io/component=web,app.kubernetes.io/name=mega-coder
-service/mega-mega-coder-worker      ClusterIP   10.43.215.154   <none>        8081/TCP         19d     app.kubernetes.io/component=worker,app.kubernetes.io/name=mega-coder
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+mega-mega-coder-alert-bot   ClusterIP   10.43.57.26     <none>        8088/TCP         63s   app.kubernetes.io/component=alert-bot,app.kubernetes.io/name=mega-coder
+mega-mega-coder-api         ClusterIP   10.43.22.63     <none>        8000/TCP         19d   app.kubernetes.io/component=api,app.kubernetes.io/name=mega-coder
+mega-mega-coder-redis       ClusterIP   10.43.165.90    <none>        6379/TCP         19d   app.kubernetes.io/component=redis,app.kubernetes.io/name=mega-coder
+mega-mega-coder-web         NodePort    10.43.147.110   <none>        8080:30080/TCP   19d   app.kubernetes.io/component=web,app.kubernetes.io/name=mega-coder
+mega-mega-coder-worker      ClusterIP   10.43.215.154   <none>        8081/TCP         19d   app.kubernetes.io/component=worker,app.kubernetes.io/name=mega-coder
 
-NAME                                     SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE     CONTAINERS   IMAGES                                                SELECTOR
-cronjob.batch/mega-mega-coder-reporter   0 */6 * * *   <none>     False     0        <none>          2m31s   reporter     docker.io/library/mega-coder-reporter:alerting-demo   <none>
+NAME                       SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+mega-mega-coder-reporter   0 */6 * * *   <none>     False     0        <none>          63s
 
-NAME                                                          AGE
-prometheusrule.monitoring.coreos.com/mega-mega-coder-alerts   2m32s
+NAME                     AGE
+mega-mega-coder-alerts   64s

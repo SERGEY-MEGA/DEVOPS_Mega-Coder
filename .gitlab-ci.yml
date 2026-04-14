@@ -159,10 +159,13 @@ deploy_helm:
         --namespace="${K8S_NAMESPACE}" \
         --dry-run=client -o yaml | kubectl apply -f -
     - |
-      # Helm ставит или обновляет release. --atomic и --cleanup-on-fail дают безопасный rollback.
+      # Helm ставит или обновляет release. --reuse-values сохраняет вручную включённый alerting overlay,
+      # чтобы обычный deploy приложения не удалял alert-bot/reporter перед демонстрацией.
+      # --atomic и --cleanup-on-fail дают безопасный rollback.
       helm upgrade --install "${HELM_RELEASE}" ./helm/mega-coder \
         --namespace "${K8S_NAMESPACE}" \
         --create-namespace \
+        --reuse-values \
         --set global.imageRegistry="${CI_REGISTRY_IMAGE}" \
         --set images.api.tag="${IMAGE_TAG}" \
         --set images.web.tag="${IMAGE_TAG}" \
