@@ -301,15 +301,25 @@ alerting:
 
 ## 12. Скриншоты результата
 
-### 12.1 Alertmanager: срабатывание alert
+Ниже приведены реальные скриншоты Telegram-чата с ботом. На них видно, что сообщения приходят именно в Telegram, текст уведомлений отображается на русском языке, а команда `/status` отвечает текущими HTTP-проверками стенда.
+
+### 12.1 Alertmanager: срабатывание alert на английском и русском
 
 ![Alertmanager firing alert in Telegram](telegram-01-firing-en-and-ru.png)
 
-### 12.2 Alertmanager: восстановление alert и сводка
+### 12.2 Alertmanager: восстановление alert, GitLab-событие и краткая сводка
 
 ![Alertmanager resolved alert in Telegram](telegram-02-resolved-gitlab-report.png)
 
-### 12.3 Интерактивные команды `/help` и `/status`
+### 12.3 Полная нить сообщений Telegram-бота
+
+![Telegram full alert thread](telegram-03-chat-full-thread.png)
+
+### 12.4 Интерактивная команда `/status`
+
+![Telegram status command](telegram-04-status-command.png)
+
+### 12.5 Интерактивные команды `/help` и `/status`
 
 ![Telegram help and status commands](telegram-05-help-status-command.png)
 
