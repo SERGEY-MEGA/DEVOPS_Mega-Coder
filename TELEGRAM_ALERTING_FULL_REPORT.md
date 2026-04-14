@@ -16,9 +16,10 @@
 | Документ | gitlub.ru | GitHub |
 |----------|-----------|--------|
 | Развёрнутый отчёт (ТЗ, архитектура, скриншоты `docs/screenshots/`) | [TELEGRAM_ALERTING_FULL_REPORT.md](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md) |
-| Отдельный отчёт по alerting | [REPORT_ALERTING.md](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/REPORT_ALERTING.md) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/REPORT_ALERTING.md) |
+| Отчёт прямо в `alert-manager/` | [REPORT_ALERTING.md](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/alert-manager/REPORT_ALERTING.md) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/alert-manager/REPORT_ALERTING.md) |
+| PDF прямо в `alert-manager/` | [REPORT_ALERTING.pdf](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/alert-manager/REPORT_ALERTING.pdf) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/alert-manager/REPORT_ALERTING.pdf) |
 | Дубликат в `docs/alerting/` | [REPORT_ALERTING.md](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/docs/alerting/REPORT_ALERTING.md) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/docs/alerting/REPORT_ALERTING.md) |
-| PDF (если есть в репозитории) | [REPORT_ALERTING.pdf](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/docs/alerting/REPORT_ALERTING.pdf) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/docs/alerting/REPORT_ALERTING.pdf) |
+| PDF в `docs/alerting/` | [REPORT_ALERTING.pdf](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/docs/alerting/REPORT_ALERTING.pdf) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/docs/alerting/REPORT_ALERTING.pdf) |
 | Журнал внедрения alerting | [SETUP_LOG.md](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/docs/alerting/SETUP_LOG.md) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/docs/alerting/SETUP_LOG.md) |
 
 ---
@@ -28,9 +29,11 @@
 | Документ | gitlub.ru | GitHub |
 |----------|-----------|--------|
 | **Корневая папка `alert-manager/`** (скрины Telegram, описание подключения) | [README.md](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/alert-manager/README.md) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/alert-manager/README.md) |
+| Свежий скрин `/status` | [telegram-04-status-command.png](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/alert-manager/telegram-04-status-command.png) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/alert-manager/telegram-04-status-command.png) |
+| Свежий скрин `/help` + `/status` | [telegram-05-help-status-command.png](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/alert-manager/telegram-05-help-status-command.png) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/alert-manager/telegram-05-help-status-command.png) |
 | Указатель в `docs/alert-manager/` | [README.md](https://gitlub.ru/MEGA/deveps-mega-coder/-/blob/main/docs/alert-manager/README.md) | [GitHub](https://github.com/SERGEY-MEGA/DEVOPS_Mega-Coder/blob/main/docs/alert-manager/README.md) |
 
-PNG в **`alert-manager/`**: `telegram-01-*.png` … `telegram-03-*.png` — открывайте через **Raw** или **View** в том же репозитории.
+PNG в **`alert-manager/`**: `telegram-01-*.png` … `telegram-05-*.png` — открывайте через **Raw** или **View** в том же репозитории.
 
 ---
 

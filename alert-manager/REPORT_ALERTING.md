@@ -252,49 +252,49 @@ REVISION: 24
 
 ### 10.1 Приложение: frontend + backend
 
-![Frontend and backend](../screenshots/app-frontend-backend.png)
+![Frontend and backend](../docs/screenshots/app-frontend-backend.png)
 
 На скриншоте видно, что frontend доступен и получает ответ от backend endpoint `/api/info`.
 
 ### 10.2 Kubernetes evidence
 
-![Kubernetes pods status](../screenshots/k8s-pods-status.png)
+![Kubernetes pods status](../docs/screenshots/k8s-pods-status.png)
 
 Скриншот показывает live-вывод Kubernetes: node Ready, pods Running, Deployments/Services/ConfigMap/Secret.
 
 ### 10.3 Grafana alert rules
 
-![Grafana alert rules](../screenshots/grafana-alert-rules.png)
+![Grafana alert rules](../docs/screenshots/grafana-alert-rules.png)
 
 На скриншоте показан раздел Grafana/Alerting или evidence по alert rules.
 
 ### 10.4 Alertmanager config
 
-![Alertmanager config](../screenshots/alertmanager-config.png)
+![Alertmanager config](../docs/screenshots/alertmanager-config.png)
 
 На скриншоте показан YAML/receiver для маршрутизации alerts в alert-bot.
 
 ### 10.5 GitLab event message
 
-![GitLab event message](../screenshots/gitlab-event-message.png)
+![GitLab event message](../docs/screenshots/gitlab-event-message.png)
 
 Скриншот подтверждает проверку GitLab webhook notification.
 
 ### 10.6 Reporter в Telegram
 
-![Report in Telegram](../screenshots/report-in-telegram.png)
+![Report in Telegram](../docs/screenshots/report-in-telegram.png)
 
 Скриншот показывает отправку краткого отчёта reporter в Telegram.
 
 ### 10.7 Интерактивная команда `/status`
 
-![Telegram status command](../screenshots/telegram-status-command.png)
+![Telegram status command](telegram-04-status-command.png)
 
 На свежем скриншоте видно, что это не симуляция: пользователь отправляет `/status`, а бот отвечает на русском языке и показывает HTTP 200 для приложения, API, Grafana и GitLab.
 
 ### 10.8 Интерактивные команды `/help` и `/status`
 
-![Telegram help and status commands](../screenshots/telegram-help-status-command.png)
+![Telegram help and status commands](telegram-05-help-status-command.png)
 
 На втором скриншоте видно полный сценарий ручной проверки: пользователь пишет `/help`, бот объясняет назначение и отсутствие секретов в git, затем пользователь пишет `/status`, и бот снова возвращает актуальный статус стенда.
 

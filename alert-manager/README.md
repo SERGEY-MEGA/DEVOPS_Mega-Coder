@@ -4,6 +4,8 @@
 
 Папка в **корне репозитория** — чтобы преподавателю было сразу видно: как подключён бот, что приходит в Telegram, и **реальные кадры** с чата (не заглушки).
 
+**Главный отчёт прямо в этой папке:** [REPORT_ALERTING.md](./REPORT_ALERTING.md) · [REPORT_ALERTING.pdf](./REPORT_ALERTING.pdf)
+
 **Связанные материалы:** [BOT_SETUP.md](../BOT_SETUP.md) · [DEMO_ALERTS.md](../DEMO_ALERTS.md) · [docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md](../docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md) · код моста: [`services/alert-bot/`](../services/alert-bot/)
 
 ---
@@ -15,6 +17,8 @@
 | [telegram-01-firing-en-and-ru.png](./telegram-01-firing-en-and-ru.png) | Чат с ботом **Alert Manager**: команда `/start`, затем алерт **Alertmanager: FIRING** (англ.) и **СРАБАТЫВАЕТ** (рус.) для `PodCrashLooping`, namespace `mega-coder`, pod `mega-mega-coder-api-demo`, кластер `k3s-home`, ссылка на runbook. |
 | [telegram-02-resolved-gitlab-report.png](./telegram-02-resolved-gitlab-report.png) | **ВОССТАНОВЛЕНО** (resolved), уведомление **GitLab pipeline: ОШИБКА** по проекту на **gitlub.ru**, краткий отчёт **MEGA CODER** (реплики, HTTP 200, Loki без ERROR). |
 | [telegram-03-chat-full-thread.png](./telegram-03-chat-full-thread.png) | Тот же сценарий подробнее: resolved, GitLab, отчёт, групповое **Alertmanager: ВОССТАНОВЛЕНО** с метаданными группы. |
+| [telegram-04-status-command.png](./telegram-04-status-command.png) | Свежая проверка 2026-04-14: пользователь пишет `/status`, бот отвечает на русском и показывает HTTP 200 для приложения, API, Grafana и GitLab. |
+| [telegram-05-help-status-command.png](./telegram-05-help-status-command.png) | Свежая проверка 2026-04-14: пользователь пишет `/help` и `/status`, бот объясняет назначение и подтверждает статус стенда. |
 
 ---
 
@@ -100,6 +104,14 @@ python3 scripts/smoke_alert_bot.py \
 ### 3.3 Полная нить чата (resolved, GitLab, отчёт, группа Alertmanager)
 
 ![Telegram: полный тред уведомлений](telegram-03-chat-full-thread.png)
+
+### 3.4 Интерактивная команда `/status`
+
+![Telegram: команда /status и HTTP-проверки стенда](telegram-04-status-command.png)
+
+### 3.5 Интерактивные команды `/help` и `/status`
+
+![Telegram: команды /help и /status](telegram-05-help-status-command.png)
 
 ---
 
