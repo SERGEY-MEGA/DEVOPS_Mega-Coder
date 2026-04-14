@@ -94,3 +94,22 @@ python3 scripts/smoke_alert_bot.py \
   --payload examples/alertmanager-firing.json \
   --secret "$ALERTMANAGER_WEBHOOK_SECRET"
 ```
+
+## 6. Команды бота
+
+На demo-стенде в `examples/values-alerting-enable.yaml` включен флаг:
+
+```yaml
+alerting:
+  alertBot:
+    enableCommands: true
+```
+
+После деплоя можно написать боту в Telegram:
+
+```text
+/help
+/status
+```
+
+`/help` кратко объясняет назначение бота. `/status` делает легкие HTTP-проверки приложения, API, Grafana и GitLab и присылает ответ на русском языке. Бот отвечает только в `TELEGRAM_CHAT_ID`, который записан в Kubernetes Secret, чтобы посторонний чат не мог дергать статус стенда.

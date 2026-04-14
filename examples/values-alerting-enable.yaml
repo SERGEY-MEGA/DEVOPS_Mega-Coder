@@ -10,6 +10,8 @@ alerting:
   alertBot:
     # Для домашнего k3s-стенда: pod использует egress хоста, если Telegram недоступен из pod-сети.
     hostNetwork: true
+    # В demo-режиме можно написать боту /status и получить короткую проверку стенда.
+    enableCommands: true
   reporter:
     enabled: true
     schedule: "0 */6 * * *"

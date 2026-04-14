@@ -83,6 +83,10 @@ alerting:
     logLevel: INFO
     sendRetries: 3
     sendTimeoutSeconds: 8
+    # Интерактивные команды Telegram (/status, /help) выключены по умолчанию.
+    # Для demo overlay можно включить без изменения webhook-логики Alertmanager.
+    enableCommands: false
+    statusCheckUrls: "Приложение=http://127.0.0.1:30080/;API=http://127.0.0.1:30080/api/info;Grafana=http://127.0.0.1:30030/login;GitLab=http://127.0.0.1:8080/users/sign_in"
     # По умолчанию pod использует обычную Kubernetes-сеть.
     # Для домашнего стенда можно включить hostNetwork, если Telegram доступен с хоста,
     # но провайдер/прокси блокирует прямой egress из pod-сети.

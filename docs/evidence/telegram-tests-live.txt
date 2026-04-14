@@ -5,5 +5,7 @@ Live Telegram checks, 2026-04-14 Europe/Moscow
 - GitLab pipeline webhook payload: sent=true
 - Reporter summary webhook: sent=true
 - Real bot check after redeploy: sent=true from Kubernetes pod alert-bot via Telegram API
+- Interactive command mode: enabled in Kubernetes pod; logs show "Telegram command polling enabled".
+- Status message smoke test: sent=true from Kubernetes pod via Telegram API, Russian text.
 
 Secrets were read from Kubernetes Secret inside the pod and were not written to this evidence file.

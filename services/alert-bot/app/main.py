@@ -39,12 +39,19 @@ def env(name: str, default: str = "") -> str:
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID")
 TELEGRAM_PARSE_MODE = env("TELEGRAM_PARSE_MODE", "HTML")
+TELEGRAM_ENABLE_COMMANDS = env("TELEGRAM_ENABLE_COMMANDS", "false").lower() == "true"
 ALERTMANAGER_WEBHOOK_SECRET = env("ALERTMANAGER_WEBHOOK_SECRET")
 GITLAB_WEBHOOK_SECRET = env("GITLAB_WEBHOOK_SECRET")
 APP_ENV = env("APP_ENV", "dev")
 CLUSTER_NAME = env("CLUSTER_NAME", "k3s-home")
 SEND_TIMEOUT_SECONDS = float(env("SEND_TIMEOUT_SECONDS", "8"))
 SEND_RETRIES = int(env("SEND_RETRIES", "3"))
+STATUS_CHECK_URLS = env(
+    "STATUS_CHECK_URLS",
+    "Приложение=http://127.0.0.1:30080/;API=http://127.0.0.1:30080/api/info;Grafana=http://127.0.0.1:30030/login;GitLab=http://127.0.0.1:8080/users/sign_in",
+)
+
+telegram_polling_task: asyncio.Task[None] | None = None
 
 
 def require_secret(expected: str, actual: str | None, source: str) -> None:
@@ -122,15 +129,15 @@ def split_telegram_message(text: str, limit: int = 3900) -> list[str]:
     return chunks
 
 
-async def send_telegram(text: str) -> dict[str, Any]:
-    """Sends a message with retry/timeout and safe no-secret demo behavior."""
-    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+async def send_telegram_to(chat_id: str, text: str) -> dict[str, Any]:
+    """Sends a Telegram message to a concrete chat with retry/timeout."""
+    if not TELEGRAM_BOT_TOKEN or not chat_id:
         logger.warning("Telegram token/chat_id are not configured; notification skipped")
         return {"sent": False, "reason": "telegram_not_configured"}
 
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload_base = {
-        "chat_id": TELEGRAM_CHAT_ID,
+        "chat_id": chat_id,
         "parse_mode": TELEGRAM_PARSE_MODE,
         "disable_web_page_preview": True,
     }
@@ -151,6 +158,126 @@ async def send_telegram(text: str) -> dict[str, Any]:
             else:
                 raise HTTPException(status_code=502, detail=f"Telegram send failed: {last_error}")
     return {"sent": True}
+
+
+async def send_telegram(text: str) -> dict[str, Any]:
+    """Sends a message to the main configured Telegram chat."""
+    return await send_telegram_to(TELEGRAM_CHAT_ID, text)
+
+
+def status_targets() -> list[tuple[str, str]]:
+    """Parses lightweight HTTP checks for the interactive /status command."""
+    targets: list[tuple[str, str]] = []
+    for item in STATUS_CHECK_URLS.split(";"):
+        if not item.strip():
+            continue
+        name, _, url = item.partition("=")
+        if name.strip() and url.strip():
+            targets.append((name.strip(), url.strip()))
+    return targets
+
+
+async def build_status_message() -> str:
+    """Builds a small Russian status report without heavy Kubernetes polling."""
+    lines = [
+        "📊 <b>MEGA CODER: статус стенда</b>",
+        f"кластер: <code>{html(CLUSTER_NAME)}</code>",
+        f"окружение: <code>{html(APP_ENV)}</code>",
+        f"alert-bot: <code>Running</code>",
+        "",
+        "<b>HTTP-проверки:</b>",
+    ]
+    async with httpx.AsyncClient(timeout=5, follow_redirects=False) as client:
+        for name, url in status_targets():
+            try:
+                response = await client.get(url)
+                ok = 200 <= response.status_code < 400
+                icon = "✅" if ok else "⚠️"
+                lines.append(f"{icon} {html(name)}: <code>HTTP {response.status_code}</code>")
+            except Exception as exc:  # noqa: BLE001 - status command should never crash polling.
+                lines.append(f"🔴 {html(name)}: <code>{html(type(exc).__name__)}</code>")
+    lines.extend(
+        [
+            "",
+            "Команды: <code>/status</code>, <code>/help</code>",
+        ]
+    )
+    return "\n".join(lines)
+
+
+async def handle_telegram_command(message: dict[str, Any]) -> None:
+    """Handles a single Telegram message from getUpdates polling."""
+    chat = message.get("chat", {}) or {}
+    chat_id = str(chat.get("id", ""))
+    text = str(message.get("text", "")).strip()
+    if not chat_id or not text:
+        return
+    if TELEGRAM_CHAT_ID and chat_id != TELEGRAM_CHAT_ID:
+        logger.warning("Ignoring Telegram command from unexpected chat")
+        return
+    command = text.split()[0].split("@", 1)[0].lower()
+    if command in {"/start", "/help"}:
+        await send_telegram_to(
+            chat_id,
+            "👋 <b>MEGA CODER Alert Bot</b>\n\n"
+            "Я отправляю alert'ы из Alertmanager/GitLab и могу ответить на команду <code>/status</code>.\n"
+            "Секреты хранятся в Kubernetes Secret, в git они не попадают.",
+        )
+    elif command == "/status":
+        await send_telegram_to(chat_id, await build_status_message())
+
+
+async def telegram_command_polling() -> None:
+    """Optional getUpdates loop for /status; disabled by default in Helm values."""
+    if not TELEGRAM_ENABLE_COMMANDS:
+        return
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        logger.warning("Telegram command polling disabled: token/chat_id are missing")
+        return
+    base_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
+    offset = 0
+    async with httpx.AsyncClient(timeout=35) as client:
+        try:
+            response = await client.get(f"{base_url}/getUpdates", params={"timeout": 0, "limit": 100})
+            response.raise_for_status()
+            updates = response.json().get("result", [])
+            if updates:
+                offset = max(int(update["update_id"]) for update in updates) + 1
+        except httpx.HTTPError as exc:
+            logger.warning("Telegram polling warmup failed: %s", exc)
+        logger.info("Telegram command polling enabled")
+        while True:
+            try:
+                response = await client.get(f"{base_url}/getUpdates", params={"timeout": 25, "offset": offset})
+                response.raise_for_status()
+                for update in response.json().get("result", []):
+                    offset = int(update["update_id"]) + 1
+                    if "message" in update:
+                        await handle_telegram_command(update["message"])
+            except asyncio.CancelledError:
+                raise
+            except Exception as exc:  # noqa: BLE001 - keep command bot alive after transient Telegram/network errors.
+                logger.warning("Telegram polling error: %s", exc)
+                await asyncio.sleep(5)
+
+
+@app.on_event("startup")
+async def startup() -> None:
+    """Starts optional Telegram command polling after FastAPI is ready."""
+    global telegram_polling_task
+    if TELEGRAM_ENABLE_COMMANDS:
+        telegram_polling_task = asyncio.create_task(telegram_command_polling())
+
+
+@app.on_event("shutdown")
+async def shutdown() -> None:
+    """Stops the polling task cleanly during Kubernetes pod termination."""
+    if telegram_polling_task:
+        telegram_polling_task.cancel()
+        try:
+            await telegram_polling_task
+        except asyncio.CancelledError:
+            pass
 
 
 def format_alert(alert: dict[str, Any], default_status: str) -> str:

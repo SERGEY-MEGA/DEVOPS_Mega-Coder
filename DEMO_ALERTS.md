@@ -79,3 +79,13 @@ sudo k3s kubectl logs -n mega-coder job/reporter-manual-demo
 Если включена отправка отчётов в Telegram (`sendReportToTelegram=true`), краткая версия уйдёт через `/webhook/report`.
 
 Готовый live-пример отчета уже сохранён в `docs/evidence/reporter-live.md`.
+
+## 8. Показать интерактивный статус в Telegram
+
+Написать боту:
+
+```text
+/status
+```
+
+Ожидаемый результат: бот отвечает сообщением `MEGA CODER: статус стенда`, где видны HTTP-проверки приложения, API, Grafana и GitLab. Это не заменяет Alertmanager, а просто удобная demo-команда для защиты, чтобы быстро показать состояние стенда без ввода длинных команд в терминале.

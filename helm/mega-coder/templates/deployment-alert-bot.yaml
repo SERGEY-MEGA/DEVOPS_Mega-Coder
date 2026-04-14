@@ -60,6 +60,10 @@ spec:
               value: {{ .Values.alerting.alertBot.sendRetries | quote }}
             - name: SEND_TIMEOUT_SECONDS
               value: {{ .Values.alerting.alertBot.sendTimeoutSeconds | quote }}
+            - name: TELEGRAM_ENABLE_COMMANDS
+              value: {{ .Values.alerting.alertBot.enableCommands | quote }}
+            - name: STATUS_CHECK_URLS
+              value: {{ .Values.alerting.alertBot.statusCheckUrls | quote }}
             - name: TELEGRAM_BOT_TOKEN
               valueFrom:
                 secretKeyRef:
