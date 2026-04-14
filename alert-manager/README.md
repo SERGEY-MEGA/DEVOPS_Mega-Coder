@@ -4,7 +4,11 @@
 
 Папка в **корне репозитория** — чтобы преподавателю было сразу видно: как подключён бот, что приходит в Telegram, и **реальные кадры** с чата (не заглушки).
 
-**Главный отчёт прямо в этой папке:** [REPORT_ALERTING.md](./REPORT_ALERTING.md) · [REPORT_ALERTING.pdf](./REPORT_ALERTING.pdf)
+**Чистовой PDF для отправки преподавателю:** [ALERT_MANAGER_TELEGRAM_REPORT.pdf](./ALERT_MANAGER_TELEGRAM_REPORT.pdf)
+
+**MD-версия чистового отчёта:** [ALERT_MANAGER_TELEGRAM_REPORT.md](./ALERT_MANAGER_TELEGRAM_REPORT.md)
+
+**Полный рабочий отчёт с расширенным evidence:** [REPORT_ALERTING.md](./REPORT_ALERTING.md) · [REPORT_ALERTING.pdf](./REPORT_ALERTING.pdf)
 
 **Связанные материалы:** [BOT_SETUP.md](../BOT_SETUP.md) · [DEMO_ALERTS.md](../DEMO_ALERTS.md) · [docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md](../docs/alert-manager/TELEGRAM_ALERTING_FULL_REPORT.md) · код моста: [`services/alert-bot/`](../services/alert-bot/)
 
