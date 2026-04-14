@@ -1,8 +1,9 @@
-Live Telegram checks, 2026-04-13 Europe/Moscow
+Live Telegram checks, 2026-04-14 Europe/Moscow
 
 - Alertmanager firing payload: sent=true
 - Alertmanager resolved payload: sent=true
 - GitLab pipeline webhook payload: sent=true
 - Reporter summary webhook: sent=true
+- Real bot check after redeploy: sent=true from Kubernetes pod alert-bot via Telegram API
 
 Secrets were read from Kubernetes Secret inside the pod and were not written to this evidence file.

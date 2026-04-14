@@ -2,26 +2,26 @@ INFO:     Started server process [1]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8088 (Press CTRL+C to quit)
-INFO:     192.168.1.29:54514 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:47788 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:47804 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:51914 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:41668 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:41674 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:45940 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:53148 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:53160 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:58158 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:53228 - "GET /health HTTP/1.1" 200 OK
-INFO:mega-coder-alert-bot:Telegram notification sent, chars=646
-INFO:     127.0.0.1:44480 - "POST /webhook/alertmanager HTTP/1.1" 200 OK
-INFO:     192.168.1.29:53234 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:53954 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:56732 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:56738 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:49836 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:47168 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:47172 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:33846 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:34248 - "GET /health HTTP/1.1" 200 OK
-INFO:     192.168.1.29:34256 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:47970 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:44158 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:44172 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:37538 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:60524 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:60526 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:38116 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:58746 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:58748 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:48122 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:58206 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:58208 - "GET /health HTTP/1.1" 200 OK
+INFO:mega-coder-alert-bot:Telegram notification sent, chars=212
+INFO:     127.0.0.1:48592 - "POST /webhook/report HTTP/1.1" 200 OK
+INFO:     192.168.1.29:51622 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:38784 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:38786 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:57434 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:47406 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:47418 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:34642 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:36944 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.29:36954 - "GET /health HTTP/1.1" 200 OK
